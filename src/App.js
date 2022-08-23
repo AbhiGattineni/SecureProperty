@@ -1,10 +1,10 @@
 
 import './App.css';
+import Button from './components/Button';
 
 function App() {
   return (
-    <div className="text-9xl">
-      Testing</div>
+    <Button name={"Submit"} styles={"bg-red-100 text-2xl"} />
   );
 }
 
