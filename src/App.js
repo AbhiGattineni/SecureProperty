@@ -1,10 +1,10 @@
 
 import './App.css';
-import Button from './components/Button';
+import Signup from './Pages/Signup';
 
 function App() {
   return (
-    <Button name={"Submit"} styles={"bg-red-100 text-2xl"} />
+    <Signup/>
   );
 }
 
