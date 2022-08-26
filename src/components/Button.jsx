@@ -5,4 +5,9 @@ const Button = (props) => {
     )
 }
 
+Button.defaultProps ={
+    name : 'Button',
+    styles : 'w-20 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg py-2.5',
+}
+
 export default Button;

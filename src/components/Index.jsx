@@ -4,4 +4,9 @@ const Index = (props) => {
     )
 }
 
+Index.defaultProps = {
+    type : 'text',
+    Label : 'text',
+}
+
 export default Index;
