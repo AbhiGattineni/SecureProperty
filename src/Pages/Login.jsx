@@ -1,6 +1,7 @@
 import React from "react";
 import Button from '../components/Button';
 import Index from '../components/Index';
+import Label from "../components/Label";
 
 
 function Login() {
@@ -11,19 +12,20 @@ function Login() {
                     <h1 className="text-center p-10 font-bold text-white text-2xl">Login</h1>
                     <form className="grid grid-cols-1 gap-3">
                         <div className="mx-5">
-                            <Index type="email" Label="E-mail" styles="w-full px-2 py-2 border-2 border-gray-500 rounded-lg"/>
+                            <Index type="email" Label="E-mail" styles="w-full px-2 py-2 border-2 border-gray-500 rounded-lg" />
                         </div>
                         <div className="mx-5">
-                            <Index type="password" Label="Password" styles="w-full px-2 py-2 border-2 border-gray-500 rounded-lg"/>
+                            <Index type="password" Label="Password" styles="w-full px-2 py-2 border-2 border-gray-500 rounded-lg" />
                         </div>
                         <div className="mx-5 flex justify-center">
-                            <Button name={'Login'} styles={"w-20 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg py-2.5"}/>
+                            <Button name={'Login'} styles={"w-20 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg py-2.5"} />
                         </div>
                     </form>
-                    <div className="text-right mx-3 text-white">
+                    <div className="text-center m-3 text-white">
                         <a href="#" className="text-white">Forgot your password?</a>
-                        </div>
-                    <Button name={"Sign in"} styles={"drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800"} />
+                    </div>
+                    <Label name={"Don't have an account?"} styles={"text-sm text-center text-black"} />
+                    <Button name={"SignUp"} styles={"drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800"} ></Button>
                 </div>
             </div>
         </div>
