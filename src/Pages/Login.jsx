@@ -24,7 +24,7 @@ function Login() {
                     <div className="text-center m-3 text-white">
                         <a href="#" className="text-white">Forgot your password?</a>
                     </div>
-                    <Label name={"Don't have an account?"} styles={"text-sm text-center text-black"} />
+                    <a href="#"><Label name={"Don't have an account?"} styles={"text-sm text-center text-white"} /></a>
                     <Button name={"SignUp"} styles={"drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800"} ></Button>
                 </div>
             </div>
