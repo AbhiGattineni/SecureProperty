@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Button from '../components/Button';
 import Index from '../components/Index';
-import Nav from './Nav';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
-
-function Signup() {
+function Signup({ refs, refer }) {
     const [values, setValues] = useState({
         username: "",
         email: "",
@@ -61,21 +61,20 @@ function Signup() {
         }
     ]
 
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const { username, email, phone, password } = values;
-        fetch("https://propert-3ffe6-default-rtdb.firebaseio.com/secureproperty.json",
-            {
-                method: "POST",
-                Headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    username, email, phone, password
-                })
-            }
-        );
-        <Nav />
+        const { username, email, phone, password, repassword } = values;
+        try {
+            const user = await createUserWithEmailAndPassword(auth, email, password);
+            refer.setLoginshow(false)
+            refer.setSignupshow(false)
+            refer.setNavshow(true)
+        }
+        catch (error) {
+            console.log(error.message)
+        }
+
     }
 
     const onChange = (e) => {
