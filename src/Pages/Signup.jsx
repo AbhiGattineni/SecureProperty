@@ -67,9 +67,15 @@ function Signup({ refs, refer }) {
         const { username, email, phone, password, repassword } = values;
         try {
             const user = await createUserWithEmailAndPassword(auth, email, password);
-            refer.setLoginshow(false)
-            refer.setSignupshow(false)
-            refer.setNavshow(true)
+            const res = fetch('https://propert-3ffe6-default-rtdb.firebaseio.com/userdata.json',
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, email, phone, password }),
+                }
+            );
         }
         catch (error) {
             console.log(error.message)
