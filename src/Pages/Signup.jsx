@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import Button from '../components/Button';
 import Index from '../components/Index';
@@ -100,7 +101,7 @@ function Signup({ refs, refer }) {
                             <Button name="Signup" styles={"w-20 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg py-2.5"} />
                         </div>
                     </form>
-                    <Button name={"Login"} styles={"drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800"} />
+                    <Link to={"/"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign In</Link>
                 </div>
             </div>
         </div>

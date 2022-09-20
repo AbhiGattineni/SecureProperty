@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import Button from '../components/Button';
 import Index from '../components/Index';
@@ -66,7 +67,7 @@ function Login({ refs, refer }) {
                         <a href="#" className="text-white">Forgot your password?</a>
                     </div>
                     <a href="#signup"><Label name={"Don't have an account?"} styles={"text-sm text-center text-white"} /></a>
-                    <Button name={"SignUp"} styles={"drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800"} ></Button>
+                    <Link to={"/signup"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign Up</Link>
                 </div>
             </div>
         </div>
