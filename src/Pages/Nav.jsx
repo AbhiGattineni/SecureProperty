@@ -4,16 +4,13 @@ import { auth } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 
-function Nav({refs,refer}) {
+function Nav() {
     const [user, setUser] = useState({});
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser)
     })
     const logout = async () => {
         await signOut(auth);
-        refer.setLoginshow(true)
-        refer.setSignupshow(false)
-        refer.setNavshow(false)
     }
     return (
         <div className="w-full h-screen">

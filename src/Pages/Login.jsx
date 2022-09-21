@@ -6,7 +6,7 @@ import Label from "../components/Label";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase'
 
-function Login({ refs, refer }) {
+function Login() {
     const [values, setValues] = useState({
         email: "",
         password: "",
@@ -32,9 +32,7 @@ function Login({ refs, refer }) {
         const { email, password } = values;
         try {
             const user = await signInWithEmailAndPassword(auth, email, password);
-            refer.setLoginshow(false)
-            refer.setSignupshow(false)
-            refer.setNavshow(true)
+            setErrorPassword(false)
         }
         catch (error) {
             setErrorPassword(true)
@@ -46,10 +44,10 @@ function Login({ refs, refer }) {
         setValues({ ...values, [e.target.name]: e.target.value })
     };
     return (
-        <div className="bg-indigo-700 w-full">
+        <div className="">
             <div class="grid grid-cols-1 gap-4 place-items-center h-screen">
                 <div className="bg-white/10 w-2/3 lg:w-1/3 md:2/3 rounded-lg drop-shadow-2xl border-1 border-white">
-                    <h1 className="text-center p-10 font-bold text-white text-2xl">Login</h1>
+                    <h1 className="text-center p-10 font-bold text-white text-2xl">Sign In</h1>
                     <form onSubmit={handleLogin} className="grid grid-cols-1 gap-3">
                         {inputs.map((input) => (
                             <Index key={input.id} {...input} value={values[input.name]} onChange={onChange} />
@@ -66,7 +64,9 @@ function Login({ refs, refer }) {
                     <div className="text-center m-3 text-white">
                         <a href="#" className="text-white">Forgot your password?</a>
                     </div>
-                    <a href="#signup"><Label name={"Don't have an account?"} styles={"text-sm text-center text-white"} /></a>
+                    <div className="text-center">
+                        <Link to={"/signup"} className="text-sm text-white">Don't have an account?</Link>
+                    </div>
                     <Link to={"/signup"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign Up</Link>
                 </div>
             </div>
