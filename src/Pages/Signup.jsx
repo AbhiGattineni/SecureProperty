@@ -14,7 +14,7 @@ function Signup() {
         password: "",
         repassword: ""
     });
-    const [showModel,setShowModel] =useState(false)
+    const [showModel, setShowModel] = useState(false)
     const [errorPassword, setErrorPassword] = useState(false);
     const inputs = [
         {
@@ -95,8 +95,8 @@ function Signup() {
     };
 
     return (
-        <div className="">
-            <div class="grid grid-cols-1 gap-4 place-items-center h-screen">
+        <div className="container-fluid py-5">
+            <div className="grid grid-cols-1 gap-4 place-items-center">
                 <div className="bg-white/10 w-2/3 lg:w-1/3 md:2/3 rounded-lg drop-shadow-2xl border-1 border-white">
                     <h1 className="text-center p-10 font-bold text-white text-2xl">Sign up</h1>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-3" method="POST">
@@ -115,7 +115,7 @@ function Signup() {
                     <Link to={"/"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign In</Link>
                 </div>
             </div>
-            <Popup visible={showModel} onClose={handleOnClose}/>
+            <Popup visible={showModel} onClose={handleOnClose} />
         </div>
     )
 }
