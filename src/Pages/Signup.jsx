@@ -15,6 +15,7 @@ function Signup() {
         repassword: ""
     });
     const [showModel, setShowModel] = useState(false)
+    const [mainPage,setMainPage] = useState(false)
     const [errorPassword, setErrorPassword] = useState(false);
     const inputs = [
         {
@@ -115,7 +116,7 @@ function Signup() {
                     <Link to={"/"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign In</Link>
                 </div>
             </div>
-            <Popup visible={showModel} onClose={handleOnClose} />
+            <Popup visible={showModel} onClose={handleOnClose} name2={"Click button to login"} name1={"Account created"} button={"Sign In"} val={true} mainPage={mainPage}/>
         </div>
     )
 }
