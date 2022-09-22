@@ -5,13 +5,18 @@ import Index from '../components/Index';
 import Label from "../components/Label";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase'
+import Popup from "./Popup";
+import Nav from "./Nav";
 
 function Login() {
     const [values, setValues] = useState({
         email: "",
         password: "",
     });
-    const [errorPassword, setErrorPassword] = useState(false);
+    const [showModel, setShowModel] = useState(false)
+    const [val,setVal] = useState(false)
+    const [name2,setName2] = useState()
+    const [mainPage,setMainPage] = useState(true)
     const inputs = [
         {
             id: 1,
@@ -32,10 +37,14 @@ function Login() {
         const { email, password } = values;
         try {
             const user = await signInWithEmailAndPassword(auth, email, password);
-            setErrorPassword(false)
+            setName2(email)
+            setShowModel(true)
+            setVal(true)
         }
         catch (error) {
-            setErrorPassword(true)
+            setName2("Invalid email or password")
+            setShowModel(true)
+            setVal(false)
         }
 
     }
@@ -43,6 +52,8 @@ function Login() {
     const onChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value })
     };
+    const handleOnClose = () => setShowModel(false)
+
     return (
         <div className="">
             <div class="grid grid-cols-1 gap-4 place-items-center h-screen">
@@ -52,11 +63,6 @@ function Login() {
                         {inputs.map((input) => (
                             <Index key={input.id} {...input} value={values[input.name]} onChange={onChange} />
                         ))}
-                        {errorPassword ? (
-                            <div className="text-center">
-                                <p className="text-red-500">Invalid Email or Password</p>
-                            </div>
-                        ) : null}
                         <div className="mx-5 flex justify-center">
                             <Button name={'Login'} styles={"w-20 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg py-2.5"} />
                         </div>
@@ -70,6 +76,7 @@ function Login() {
                     <Link to={"/signup"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign Up</Link>
                 </div>
             </div>
+            <Popup visible={showModel} onClose={handleOnClose} name1={"Secure Property"} name2={name2} button={"OK"} val={val} mainPage={mainPage}/>
         </div>
     )
 }
