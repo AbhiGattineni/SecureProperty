@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import Button from '../components/Button';
 import Index from '../components/Index';
@@ -14,6 +14,7 @@ function Login() {
         password: "",
     });
     const [showModel, setShowModel] = useState(false)
+    const navigate = useNavigate()
     const [val,setVal] = useState(false)
     const [name2,setName2] = useState()
     const [mainPage,setMainPage] = useState(true)
@@ -37,9 +38,8 @@ function Login() {
         const { email, password } = values;
         try {
             const user = await signInWithEmailAndPassword(auth, email, password);
-            setName2(email)
-            setShowModel(true)
-            setVal(true)
+            window.localStorage.setItem("isLoggedin",true);
+            navigate('/')
         }
         catch (error) {
             setName2("Invalid email or password")
