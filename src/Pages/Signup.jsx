@@ -113,7 +113,7 @@ function Signup() {
                             <Button name="Signup" styles={"w-20 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg py-2.5"} />
                         </div>
                     </form>
-                    <Link to={"/"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign In</Link>
+                    <Link to={"/Login"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign In</Link>
                 </div>
             </div>
             <Popup visible={showModel} onClose={handleOnClose} name2={"Click button to login"} name1={"Account created"} button={"Sign In"} val={true} mainPage={mainPage}/>

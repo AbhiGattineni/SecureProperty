@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import Button from "../components/Button";
 import { auth } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { Link, useNavigate } from "react-router-dom";
 
 
 function Nav() {
+    const navigate = useNavigate()
     const [user, setUser] = useState({});
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser)
     })
     const logout = async () => {
         await signOut(auth);
+        navigate('/Login')
+        window.localStorage.removeItem("isLoggedin")
     }
     return (
         <div className="w-full h-screen">
