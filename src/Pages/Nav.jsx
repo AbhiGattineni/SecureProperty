@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/Button";
 import { auth } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function Nav() {
@@ -15,6 +15,7 @@ function Nav() {
         await signOut(auth);
         navigate('/Login')
         window.localStorage.removeItem("isLoggedin")
+        window.localStorage.removeItem("email")
     }
     return (
         <div className="w-full h-screen">
@@ -30,7 +31,7 @@ function Nav() {
                 </nav>
             </div>
             <div className="text-center drop-shadow-lg shadow-black text-2xl my-20">
-                <h1>{user?.email}</h1>
+                <h1>{window.localStorage.getItem("email")}</h1>
             </div>
         </div>
     )

@@ -2,11 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import Button from '../components/Button';
 import Index from '../components/Index';
-import Label from "../components/Label";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase'
 import Popup from "./Popup";
-import Nav from "./Nav";
+import { FcGoogle } from 'react-icons/fc';
+import { AiOutlineLine } from 'react-icons/ai';
+import { GrFacebookOption } from 'react-icons/gr';
+import {signInWithGoogle} from '../firebase';
 
 function Login() {
     const [values, setValues] = useState({
@@ -15,9 +17,9 @@ function Login() {
     });
     const [showModel, setShowModel] = useState(false)
     const navigate = useNavigate()
-    const [val,setVal] = useState(false)
-    const [name2,setName2] = useState()
-    const [mainPage,setMainPage] = useState(true)
+    const [val, setVal] = useState(false)
+    const [name2, setName2] = useState()
+    const [mainPage, setMainPage] = useState(true)
     const inputs = [
         {
             id: 1,
@@ -33,12 +35,18 @@ function Login() {
         }
     ]
 
+    const handleGoogle = () => {
+        signInWithGoogle()
+        navigate('/')
+    }
+
     const handleLogin = async (event) => {
         event.preventDefault();
         const { email, password } = values;
         try {
             const user = await signInWithEmailAndPassword(auth, email, password);
-            window.localStorage.setItem("isLoggedin",true);
+            window.localStorage.setItem("isLoggedin", true);
+            localStorage.setItem("email",email)
             navigate('/')
         }
         catch (error) {
@@ -67,16 +75,27 @@ function Login() {
                             <Button name={'Login'} styles={"w-20 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg py-2.5"} />
                         </div>
                     </form>
-                    <div className="text-center m-3 text-white">
+                    <div className="text-center m-2 text-white">
                         <a href="#" className="text-white">Forgot your password?</a>
                     </div>
                     <div className="text-center">
                         <Link to={"/signup"} className="text-sm text-white">Don't have an account?</Link>
                     </div>
+                    <div className="justify-center flex mt-2">
+                        <AiOutlineLine className="w-14 h-6 text-zinc-600" />
+                        <p className="font-medium text-zinc-600">OR</p>
+                        <AiOutlineLine className="w-14 h-6 text-zinc-600" />
+                    </div>
+                    <div className="grid grid-cols-4 justify-items-center mt-2">
+                        <div />
+                        <button onClick={handleGoogle}><FcGoogle className="h-10 w-10 bg-slate-200 drop-shadow-lg p-1 rounded-full" /></button>
+                        <button><GrFacebookOption className="h-10 w-10 bg-blue-800 text-white drop-shadow-lg p-1 rounded-full" /></button>
+                        <div />
+                    </div>
                     <Link to={"/signup"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign Up</Link>
                 </div>
             </div>
-            <Popup visible={showModel} onClose={handleOnClose} name1={"Secure Property"} name2={name2} button={"OK"} val={val} mainPage={mainPage}/>
+            <Popup visible={showModel} onClose={handleOnClose} name1={"Secure Property"} name2={name2} button={"OK"} val={val} mainPage={mainPage} />
         </div>
     )
 }
