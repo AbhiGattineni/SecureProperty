@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/Button";
 import { auth } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 function Nav() {
@@ -25,7 +25,7 @@ function Nav() {
                     <Button name='=' styles='w-5 bg-blue-500 rounded text-white md:hidden' />
                     <ul className="fixed left-0 right-0 min-h-screen bg-gray-200 space-y-4 p-4 transform traslate-x-full md:min-h-0 md:space-y-0 md:space-x-6 md:p-0 md:tarnslate-x-0 md:relative md:flex">
                         <li><a href="#" className="text-black">VIEW PROPERTY</a></li>
-                        <li><a href="#" className="text-black">ADD PROPERTY</a></li>
+                        <li><Link to={"/Addproperty"} className="text-black">ADD PROPERTY</Link></li>
                         <li><button onClick={logout} name="LOGOUT" className='bg-gray-200'>LOGOUT</button></li>
                     </ul>
                 </nav>

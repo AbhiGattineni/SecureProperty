@@ -64,7 +64,7 @@ function Login() {
 
     return (
         <div className="">
-            <div class="grid grid-cols-1 gap-4 place-items-center h-screen">
+            <div className="grid grid-cols-1 gap-4 place-items-center h-screen">
                 <div className="bg-white/10 w-2/3 lg:w-1/3 md:2/3 rounded-lg drop-shadow-2xl border-1 border-white">
                     <h1 className="text-center p-10 font-bold text-white text-2xl">Sign In</h1>
                     <form onSubmit={handleLogin} className="grid grid-cols-1 gap-3">
