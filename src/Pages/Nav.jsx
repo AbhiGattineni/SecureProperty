@@ -31,7 +31,7 @@ function Nav() {
                 </nav>
             </div>
             <div className="text-center drop-shadow-lg shadow-black text-2xl my-20">
-                <h1>{window.localStorage.getItem("email")}</h1>
+                <h1>{user.email}</h1>
             </div>
         </div>
     )
