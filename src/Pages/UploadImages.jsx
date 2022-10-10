@@ -13,11 +13,11 @@ function UploadImages() {
         propertyName: "",
         address: "",
     });
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState('');
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser)
+        setUid(user.uid)
     })
-    const [uid, setUid] = useState("")
     const inputs = [
         {
             id: 1,
@@ -37,10 +37,10 @@ function UploadImages() {
     };
     const [progress, setProgress] = useState(0);
     const [Running, setRunning] = useState(false)
+    const [uid, setUid] = useState('')
     const [URL, setUrl] = useState('')
     const handleDetails = async (event) => {
         event.preventDefault();
-        setUid(user.uid)
         const { propertyName, address } = values;
         try {
             const res = fetch('https://propert-3ffe6-default-rtdb.firebaseio.com/PropertyDatawithkey.json',
@@ -60,11 +60,12 @@ function UploadImages() {
 
     const uploadFile = (e) => {
         e.preventDefault()
-        const file = e.target.files[0]
-        setUid(user.uid)
+        for (let i=0; i<e.target.files.length; i++){
+            const file = e.target.files[i]
+            setRunning(true)
+            submitFiles(file)
+        }
         handleDetails(e)
-        setRunning(true)
-        submitFiles(file)
     }
     const submitFiles = (file) => {
         if (!file) return;
@@ -77,7 +78,7 @@ function UploadImages() {
         }, (err) => console.log(err),
             () => {
                 getDownloadURL(uploadTask.snapshot.ref)
-                    .then(url => setUrl(url))
+                    .then((url) => {setUrl(url)})
             });
     }
 
