@@ -3,9 +3,10 @@ import Button from "../components/Button";
 import { auth } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { Link, useNavigate } from "react-router-dom";
+import DisplayImages from "./DisplayImages";
 
 
-function Nav() {
+function Newproperty() {
     const navigate = useNavigate()
     const [user, setUser] = useState({});
     onAuthStateChanged(auth, (currentUser) => {
@@ -30,11 +31,9 @@ function Nav() {
                     </ul>
                 </nav>
             </div>
-            <div className="text-center drop-shadow-lg shadow-black text-2xl my-20">
-                <h1>{user.email}</h1>
-            </div>
+            <DisplayImages />
         </div>
     )
 }
 
-export default Nav;
+export default Newproperty;

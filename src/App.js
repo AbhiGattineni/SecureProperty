@@ -9,6 +9,7 @@ import Signup from './Pages/Signup';
 import Login from './Pages/Login';
 import Nav from './Pages/Nav';
 import Addproperty from './Pages/Addproperty';
+import Newproperty from "./Pages/Newproperty";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/signup" exact element={<Signup />} />
           <Route path="/Login" exact element={<Login />} />
           <Route path="/Addproperty" exact element={<Addproperty />} />
+          <Route path="/Newproperty" exact element={<Newproperty />} />
         </Routes>
       </Router>
     </div>

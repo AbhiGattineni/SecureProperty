@@ -62,8 +62,8 @@ function Addproperty() {
         <Link to={"/"} className="text-xl font-medium text-black">SECURE PROPERTY</Link>
         <nav>
           <Button name='=' styles='w-5 bg-blue-500 rounded text-white md:hidden' />
-          <ul className="fixed left-0 right-0 min-h-screen bg-gray-200 space-y-4 p-4 transform traslate-x-full md:min-h-0 md:space-y-0 md:space-x-6 md:p-0 md:tarnslate-x-0 md:relative md:flex">
-            <li><a href="#" className="text-black">VIEW PROPERTY</a></li>
+          <ul className="fixed left-0 right-0 min-h-screen bg-gray-200 space-y-4 p-4 transform translate-x-full md:min-h-0 md:space-y-0 md:space-x-6 md:p-0 md:tarnslate-x-0 md:relative md:flex">
+            <li><Link to={"/Newproperty"} className="text-black">VIEW PROPERTY</Link></li>
             <li><Link to={"/Addproperty"} className="text-black">ADD PROPERTY</Link></li>
             <li><button onClick={logout} name="LOGOUT" className='bg-gray-200'>LOGOUT</button></li>
           </ul>
