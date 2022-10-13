@@ -7,6 +7,7 @@ import Index from "../components/Index";
 import { auth, db, propertiesDbRef } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { addDoc } from "firebase/firestore";
+import { Alert } from "bootstrap";
 
 function Addproperty() {
   const [values, setValues] = useState({
@@ -60,23 +61,13 @@ function Addproperty() {
 
   const addNewProperty = (e) => {
     e.preventDefault();
-    // for (let i = 0; i < e.target.files.length; i++) {
-    //   const file = e.target.files[i];
-    //   setRunning(true);
-    //   submitFiles(file);
-    // }
-    // handleDetails(e);
-    // db.collection("properties").add({
-    //   p_name: values.propertyName,
-    //   p_address: values.address,
-    // });
     addDoc(propertiesDbRef, values)
       .then((propertiesDbRef) => {
         setValues({
           propertyName: "",
           propertyAddress: "",
         });
-        console.log("Document created");
+        alert("Document created");
       })
       .catch((error) => {
         console.log(error);
