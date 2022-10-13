@@ -4,10 +4,11 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import Addproperty from "./Addproperty";
 import Editdetails from "./Editdetails";
+import DisplayImages from "./DisplayImages";
 
 function Nav() {
   const tabList = {
-    view: "",
+    view: <DisplayImages />,
     add: <Addproperty />,
     edit: <Editdetails />,
   };
@@ -15,9 +16,6 @@ function Nav() {
   const [user, setUser] = useState({});
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("Testing");
-  // onAuthStateChanged(auth, (currentUser) => {
-  //   setUser(currentUser);
-  // });
   const logout = async () => {
     console.log("Executed");
     setError("");
@@ -73,7 +71,7 @@ function Nav() {
           </ul>
         </nav>
       </div>
-      <div className="text-center drop-shadow-lg shadow-black text-2xl my-20">
+      <div className="text-center drop-shadow-lg shadow-black text-2xl">
         {tabList[activeTab]}
       </div>
     </div>
