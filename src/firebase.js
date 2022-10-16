@@ -25,4 +25,4 @@ export const signInWithGoogle = () => signInWithPopup(auth, provider);
 //adding documents
 export const db = getFirestore(app);
 export const propertiesDbRef = collection(db, "properties");
-
+export const usersDbRef = collection(db, "users");
