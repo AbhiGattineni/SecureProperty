@@ -1,10 +1,9 @@
 import React from "react";
 import Button from "../components/Button";
-import { storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useState } from "react";
 import Index from "../components/Index";
-import { auth, db, propertiesDbRef } from "../firebase";
+import { auth, db, propertiesDbRef, storage } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
@@ -14,6 +13,7 @@ function Addproperty() {
     propertyName: "",
     propertyAddress: "",
   });
+  const [propertyName, setPropertyName] = useState();
   const [user, setUser] = useState("");
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
@@ -33,27 +33,69 @@ function Addproperty() {
       placeholder: "Located Address",
     },
   ];
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
+
   const [progress, setProgress] = useState(0);
   const [Running, setRunning] = useState(false);
   const [uid, setUid] = useState("");
   const [URL, setUrl] = useState("");
   const [users, setUsers] = useState([]);
+  const allInputs = { imgUrl: "" };
+  const [imageAsFile, setImageAsFile] = useState("");
+  const [imageAsUrl, setImageAsUrl] = useState(allInputs);
 
   useEffect(() => {
-    const getUsers = async () =>{
+    const getUsers = async () => {
       const data = await getDocs(propertiesDbRef);
-      setUsers(data.docs.map((doc) => ({...doc.data(), id:doc.id})))
+      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
-    getUsers()
-  },[])
+    getUsers();
+  }, []);
 
-  const addNewProperty = async (event) => {
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+    console.log(e.target.value);
+  };
+
+  const addNewProperty = (event) => {
     event.preventDefault();
-    await addDoc(propertiesDbRef, { propertyName: values.propertyName, propertyAddress: values.propertyAddress });
-  }
+    // await addDoc(propertiesDbRef, { propertyName: values.propertyName, propertyAddress: values.propertyAddress });
+
+    // console.log("start of upload");
+    // if (imageAsFile === "") {
+    //   console.error(`not an image, the image file is a ${typeof imageAsFile}`);
+    // }
+
+    // const uploadTask = storage
+    //   .ref(`/images/${imageAsFile.name}`)
+    //   .put(imageAsFile);
+
+    // uploadTask.on(
+    //   "state_changed",
+    //   (snapShot) => {
+    //     console.log(snapShot);
+    //   },
+    //   (err) => {
+    //     console.log(err);
+    //   },
+    //   () => {
+    //     storage
+    //       .ref("images")
+    //       .child(imageAsFile.name)
+    //       .getDownloadURL()
+    //       .then((fireBaseUrl) => {
+    //         setImageAsUrl((prevObject) => ({
+    //           ...prevObject,
+    //           imgUrl: fireBaseUrl,
+    //         }));
+    //       });
+    //   }
+    // );
+  };
+
+  // const uploadFile = (e) => {
+  //   const image = e.target.files[0];
+  //   setImageAsFile((imageFile) => image);
+  // };
 
   // const handleDetails = async (event) => {
   //   event.preventDefault();
@@ -77,7 +119,7 @@ function Addproperty() {
   // const addNewProperty = (e) => {
   //   e.preventDefault();
   //   await addDoc(propertiesDbRef, values)
-  //     .then((propertiesDbRef) => {  
+  //     .then((propertiesDbRef) => {
   //       setValues({
   //         propertyName: "",
   //         propertyAddress: "",
@@ -131,7 +173,6 @@ function Addproperty() {
                 className="form-control w-1/3 px-3 ml-12 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded"
                 type="file"
                 onChange={uploadFile}
-                multiple
               ></input> */}
               {Running ? (
                 <div className="mx-5">
