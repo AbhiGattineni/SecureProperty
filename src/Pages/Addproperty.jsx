@@ -59,9 +59,33 @@ function Addproperty() {
     await uploadBytes(imageRef, imageAsFile).then((snapshot) => {
       console.log("Uploaded a blob or file!");
     });
-    imageRef.getDownloadURL().then(function (url) {
-      setValues({ ...values, propertyUrl: url });
-    });
+    getDownloadURL(imageRef)
+      .then((url) => {
+        setValues({ ...values, propertyUrl: url });
+        console.log(url);
+      })
+      .catch((error) => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case "storage/object-not-found":
+            console.log(error.code);
+            break;
+          case "storage/unauthorized":
+            console.log(error.code);
+            break;
+          case "storage/canceled":
+            console.log(error.code);
+            break;
+
+          case "storage/unknown":
+            console.log(error.code);
+            break;
+
+          default:
+            break;
+        }
+      });
 
     await addDoc(propertiesDbRef, values)
       .then((propertiesDbRef) => {
