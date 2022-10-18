@@ -1,24 +1,22 @@
 import React from "react";
 import Button from "../components/Button";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
 import Index from "../components/Index";
 import { auth, db, propertiesDbRef, storage } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
+import "firebase/storage";
 
 function Addproperty() {
   const [values, setValues] = useState({
     propertyName: "",
     propertyAddress: "",
+    propertyUrl: "",
   });
   const [propertyName, setPropertyName] = useState();
   const [user, setUser] = useState("");
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-    setUid(user.uid);
-  });
   const inputs = [
     {
       id: 1,
@@ -33,7 +31,9 @@ function Addproperty() {
       placeholder: "Located Address",
     },
   ];
-
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
   const [progress, setProgress] = useState(0);
   const [Running, setRunning] = useState(false);
   const [uid, setUid] = useState("");
@@ -51,45 +51,30 @@ function Addproperty() {
     getUsers();
   }, []);
 
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-    console.log(e.target.value);
-  };
-
-  const addNewProperty = (event) => {
+  const addNewProperty = async (event) => {
     event.preventDefault();
-    // await addDoc(propertiesDbRef, { propertyName: values.propertyName, propertyAddress: values.propertyAddress });
+    if (imageAsFile == null) return;
 
-    // console.log("start of upload");
-    // if (imageAsFile === "") {
-    //   console.error(`not an image, the image file is a ${typeof imageAsFile}`);
-    // }
+    const imageRef = ref(storage, `/Images/${imageAsFile.name}`);
+    await uploadBytes(imageRef, imageAsFile).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+    imageRef.getDownloadURL().then(function (url) {
+      setValues({ ...values, propertyUrl: url });
+    });
 
-    // const uploadTask = storage
-    //   .ref(`/images/${imageAsFile.name}`)
-    //   .put(imageAsFile);
-
-    // uploadTask.on(
-    //   "state_changed",
-    //   (snapShot) => {
-    //     console.log(snapShot);
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   },
-    //   () => {
-    //     storage
-    //       .ref("images")
-    //       .child(imageAsFile.name)
-    //       .getDownloadURL()
-    //       .then((fireBaseUrl) => {
-    //         setImageAsUrl((prevObject) => ({
-    //           ...prevObject,
-    //           imgUrl: fireBaseUrl,
-    //         }));
-    //       });
-    //   }
-    // );
+    await addDoc(propertiesDbRef, values)
+      .then((propertiesDbRef) => {
+        setValues({
+          propertyName: "",
+          propertyAddress: "",
+          propertyUrl: "",
+        });
+        alert("Document created");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   // const uploadFile = (e) => {
@@ -169,11 +154,13 @@ function Addproperty() {
                   onChange={onChange}
                 />
               ))}
-              {/* <input
+              <input
                 className="form-control w-1/3 px-3 ml-12 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded"
                 type="file"
-                onChange={uploadFile}
-              ></input> */}
+                onChange={(e) => {
+                  setImageAsFile(e.target.files[0]);
+                }}
+              ></input>
               {Running ? (
                 <div className="mx-5">
                   <div
