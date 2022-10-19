@@ -3,9 +3,8 @@ import Button from "../components/Button";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState, useRef } from "react";
 import Index from "../components/Index";
-import { propertiesDbRef, storage } from "../firebase";
+import { auth, propertiesDbRef, storage } from "../firebase";
 import { addDoc, getDocs } from "firebase/firestore";
-import { useEffect } from "react";
 import "firebase/storage";
 
 function Addproperty() {
@@ -54,7 +53,7 @@ function Addproperty() {
     await getDownloadURL(imageRef)
       .then((url) => {
         console.log(url);
-        addDoc(propertiesDbRef, { ...values, propertyUrl: url })
+        addDoc(propertiesDbRef, { ...values, propertyUrl: url, UserUid: auth.currentUser.uid })
           .then((propertiesDbRef) => {
             setValues({
               propertyName: "",
@@ -66,7 +65,7 @@ function Addproperty() {
           .catch((error) => {
             console.log(error);
           });
-        setValues({ ...values, propertyUrl: url });
+        setValues({ ...values, propertyUrl: url, UserUid: auth.currentUser.uid });
       })
       .catch((error) => {
         // A full list of error codes is available at
