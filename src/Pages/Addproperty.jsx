@@ -1,11 +1,10 @@
 import React from "react";
 import Button from "../components/Button";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Index from "../components/Index";
-import { auth, db, propertiesDbRef, storage } from "../firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { propertiesDbRef, storage } from "../firebase";
+import { addDoc, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
 import "firebase/storage";
 
@@ -13,10 +12,7 @@ function Addproperty() {
   const [values, setValues] = useState({
     propertyName: "",
     propertyAddress: "",
-    propertyUrl: "",
   });
-  const [propertyName, setPropertyName] = useState();
-  const [user, setUser] = useState("");
   const inputs = [
     {
       id: 1,
@@ -31,25 +27,21 @@ function Addproperty() {
       placeholder: "Located Address",
     },
   ];
+  const [progress] = useState(0);
+  const [Running] = useState(false);
+  const [imageAsFile, setImageAsFile] = useState("");
+  const inputRef = useRef(null);
+
+  // useEffect(() => {
+  //   const getUsers = async () => {
+  //     const data = await getDocs(propertiesDbRef);
+  //     // setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  //   };
+  // }, []);
+
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-  const [progress, setProgress] = useState(0);
-  const [Running, setRunning] = useState(false);
-  const [uid, setUid] = useState("");
-  const [URL, setUrl] = useState("");
-  const [users, setUsers] = useState([]);
-  const allInputs = { imgUrl: "" };
-  const [imageAsFile, setImageAsFile] = useState("");
-  const [imageAsUrl, setImageAsUrl] = useState(allInputs);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(propertiesDbRef);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    getUsers();
-  }, []);
 
   const addNewProperty = async (event) => {
     event.preventDefault();
@@ -57,12 +49,24 @@ function Addproperty() {
 
     const imageRef = ref(storage, `/Images/${imageAsFile.name}`);
     await uploadBytes(imageRef, imageAsFile).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
+      console.log(snapshot);
     });
-    getDownloadURL(imageRef)
+    await getDownloadURL(imageRef)
       .then((url) => {
-        setValues({ ...values, propertyUrl: url });
         console.log(url);
+        addDoc(propertiesDbRef, { ...values, propertyUrl: url })
+          .then((propertiesDbRef) => {
+            setValues({
+              propertyName: "",
+              propertyAddress: "",
+            });
+            inputRef.current.value = null;
+            alert("Document created");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        setValues({ ...values, propertyUrl: url });
       })
       .catch((error) => {
         // A full list of error codes is available at
@@ -86,81 +90,20 @@ function Addproperty() {
             break;
         }
       });
-
-    await addDoc(propertiesDbRef, values)
-      .then((propertiesDbRef) => {
-        setValues({
-          propertyName: "",
-          propertyAddress: "",
-          propertyUrl: "",
-        });
-        alert("Document created");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // await addDoc(propertiesDbRef, values)
+    //   .then((propertiesDbRef) => {
+    //     // setValues({
+    //     //   propertyName: "",
+    //     //   propertyAddress: "",
+    //     //   propertyUrl: "",
+    //     // });
+    //     alert("Document created");
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
-  // const uploadFile = (e) => {
-  //   const image = e.target.files[0];
-  //   setImageAsFile((imageFile) => image);
-  // };
-
-  // const handleDetails = async (event) => {
-  //   event.preventDefault();
-  //   const { propertyName, address } = values;
-  //   try {
-  //     const res = fetch(
-  //       "https://propert-3ffe6-default-rtdb.firebaseio.com/PropertyDatawithkey.json",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ uid, propertyName, address }),
-  //       }
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const addNewProperty = (e) => {
-  //   e.preventDefault();
-  //   await addDoc(propertiesDbRef, values)
-  //     .then((propertiesDbRef) => {
-  //       setValues({
-  //         propertyName: "",
-  //         propertyAddress: "",
-  //       });
-  //       alert("Document created");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-
-  // const submitFiles = (file) => {
-  //   if (!file) return;
-  //   let fileRef = ref(storage, `/Images/${file.name}`);
-  //   const uploadTask = uploadBytesResumable(fileRef, file);
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {
-  //       const prog = Math.round(
-  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-  //       );
-  //       setProgress(prog);
-  //       console.log("upload is " + prog + "% done");
-  //     },
-  //     (err) => console.log(err),
-  //     () => {
-  //       getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-  //         setUrl(url);
-  //       });
-  //     }
-  //   );
-  // };
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 gap-4 place-items-center mt-10">
@@ -181,6 +124,7 @@ function Addproperty() {
               <input
                 className="form-control w-1/3 px-3 ml-12 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded"
                 type="file"
+                ref={inputRef}
                 onChange={(e) => {
                   setImageAsFile(e.target.files[0]);
                 }}
