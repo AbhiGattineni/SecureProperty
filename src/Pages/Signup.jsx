@@ -96,7 +96,7 @@ function Signup() {
     };
 
     return (
-        <div className="container-fluid py-5">
+        <div className="container-fluid py-28 snap-x container-snap">
             <div className="grid grid-cols-1 gap-4 place-items-center">
                 <div className="bg-white/10 w-2/3 lg:w-1/3 md:2/3 rounded-lg drop-shadow-2xl border-1 border-white">
                     <h1 className="text-center p-10 font-bold text-white text-2xl">Sign up</h1>

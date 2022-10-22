@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup,sendPasswordResetEmail } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
 
