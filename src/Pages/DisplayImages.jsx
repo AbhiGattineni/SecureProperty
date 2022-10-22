@@ -23,10 +23,10 @@ function DisplayImages() {
   return (
     <div className="bg-white">
       <div className="grid grid-cols-4">
-        <div className="text-center px-3">
+        <div className="text-center">
           <ul className="grid grid-cols-1 divide-y">
             {tabs.map((tab) => (
-              <li key={tab.name} className="py-3">
+              <li key={tab.name} className="py-3 hover:bg-gray-300">
                 <a
                   href={tab.link}
                   onClick={() => setOpenTab(tab.name)}>

@@ -8,7 +8,7 @@ function Popup({visible, onClose, name1, name2, button, val, mainPage}) {
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center">
       <div className="bg-white p-2 rounded w-80 relative">
         <div className="absolute top-0 right-0 h-6 w-8 hover:bg-red-400 text-center">
-            <button onClick={onClose} className='hover:text-white font-bold'>X</button>
+            <button onClick={onClose} className='hover:text-white font-bold px-1'>X</button>
         </div>
         <h1 className="font-semibold text-center text-xl text-gray-700 mt-2">
           {name1}

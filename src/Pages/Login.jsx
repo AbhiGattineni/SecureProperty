@@ -76,8 +76,8 @@ function Login() {
   const handleOnClose = () => setShowModel(false);
 
   return (
-    <div className="">
-      <div className="grid grid-cols-1 gap-4 place-items-center h-screen">
+    <div className="container-fluid py-28">
+      <div className="grid grid-cols-1 gap-4 place-items-center">
         <div className="bg-white/10 w-2/3 lg:w-1/3 md:2/3 rounded-lg drop-shadow-2xl border-1 border-white">
           <h1 className="text-center p-10 font-bold text-white text-2xl">
             Sign In
@@ -101,9 +101,10 @@ function Login() {
             </div>
           </form>
           <div className="text-center m-2 text-white">
-            <a href="#" className="text-white">
+          <Link
+            to={"/Forgot"} className="text-white">
               Forgot your password?
-            </a>
+            </Link>
           </div>
           <div className="text-center">
             <Link to={"/signup"} className="text-sm text-white">
