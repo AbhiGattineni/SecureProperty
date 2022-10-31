@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { db } from "../firebase";
-import { collection, getDocs } from 'firebase/firestore';
+import { getDocs } from 'firebase/firestore';
+import { propertiesDbRef } from "../firebase";
 
 function DisplayImages() {
   const tabs = [
@@ -9,13 +9,12 @@ function DisplayImages() {
     { name: "property 2", link: "#", img: "/Images/lib2.jpg", },
     { name: "property 3", link: "#", img: "/Images/lib5.jpg", },
   ];
-  const userCollectionRef = collection(db, "properties");
   const [users, setUsers] = useState([]);
   const [openTab, setOpenTab] = useState("property 1");
 
   useEffect(() => {
     const getUsers = async () => {
-      const data = await getDocs(userCollectionRef);
+      const data = await getDocs(propertiesDbRef);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     }
     getUsers()
@@ -54,19 +53,17 @@ function DisplayImages() {
                 </select>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {/* <div className="max-w-sm overflow-hidden shadow-lg h-48"> */}
-                  {users.map((user) => (
+                {users.map((user) => (
+                  <div>
                     <div>
-                      <div>
-                        <img className="w-full h-40" src={user.propertyUrl} alt="Property" />
-                      </div>
-                      <div className="pb-1 bg-gray-300 text-center font-medium relative h-10">
-                        <div className="text-xl absolute inset-x-0 bottom-0 h-10 uppercase">{user.propertyName}</div>
-                      </div>
+                      <img className="w-full h-40" src={user.propertyUrl} alt="Property" />
                     </div>
-                  )
-                  )}
-                {/* </div> */}
+                    <div className="pb-1 bg-gray-300 text-center font-medium relative h-10">
+                      <div className="text-xl absolute inset-x-0 bottom-0 h-10 uppercase">{user.propertyName}</div>
+                    </div>
+                  </div>
+                )
+                )}
               </div>
             </div>
           ))}

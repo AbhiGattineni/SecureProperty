@@ -2,13 +2,15 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import Button from "../components/Button";
 import Index from "../components/Index";
-import { GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Popup from "./Popup";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineLine } from "react-icons/ai";
 import { GrFacebookOption } from "react-icons/gr";
 import firebase from "firebase/compat/app";
 import { signInWithGoogle } from "../firebase";
+import { usersDbRef } from "../firebase";
+import { addDoc } from "firebase/firestore";
 
 function Login() {
   const [values, setValues] = useState({
@@ -36,7 +38,14 @@ function Login() {
   ];
 
   const handleGoogle = () => {
-    signInWithGoogle().then(() => {
+    signInWithGoogle().then((result) => {
+      addDoc(usersDbRef, { username: result.user.displayName, email: result.user.email, phone: result.user.phoneNumber, Role: "User" })
+        .then((usersDbRef) => {
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      setValues({ username: result.user.displayName, email: result.user.email, phone: result.user.phoneNumber, Role: "User" });
       navigate("/");
     });
 
@@ -101,8 +110,8 @@ function Login() {
             </div>
           </form>
           <div className="text-center m-2 text-white">
-          <Link
-            to={"/Forgot"} className="text-white">
+            <Link
+              to={"/Forgot"} className="text-white">
               Forgot your password?
             </Link>
           </div>
