@@ -28,9 +28,9 @@ function Forgot() {
         event.preventDefault();
         const { email } = values;
         try {
-            auth.sendPasswordResetEmail(email)
-                .then(function () {
-                    alert('Please check your email...')
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    alert('Please check your email... \nNOTE : Not recevied E-mail, check in spam folder.')
                 })
         }
         catch {

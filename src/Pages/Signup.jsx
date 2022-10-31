@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import Button from '../components/Button';
 import Index from '../components/Index';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, usersDbRef } from "../firebase";
+import { addDoc } from "firebase/firestore";
 import Popup from "./Popup";
 
 function Signup() {
@@ -15,7 +16,7 @@ function Signup() {
         repassword: ""
     });
     const [showModel, setShowModel] = useState(false)
-    const [mainPage,setMainPage] = useState(false)
+    const [mainPage, setMainPage] = useState(false)
     const [errorPassword, setErrorPassword] = useState(false);
     const inputs = [
         {
@@ -68,18 +69,21 @@ function Signup() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const { username, email, phone, password, repassword } = values;
+        const { username, email, phone, password } = values;
         try {
             const user = await createUserWithEmailAndPassword(auth, email, password);
-            const res = fetch('https://propert-3ffe6-default-rtdb.firebaseio.com/userdata.json',
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ username, email, phone, password }),
-                }
-            );
+            addDoc(usersDbRef, { ...values, Role: "User" })
+                .then((usersDbRef) => {
+                    setValues({
+                        email: "",
+                        username: "",
+                        phone: "",
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            setValues({ ...values, Role: "User" });
             setErrorPassword(false)
             setShowModel(true)
         }
@@ -116,7 +120,7 @@ function Signup() {
                     <Link to={"/Login"} className="drop-shadow-2xl rounded-t-full mt-5 bg-white h-24 w-full flex items-center justify-center font-bold text-2xl text-blue-800">Sign In</Link>
                 </div>
             </div>
-            <Popup visible={showModel} onClose={handleOnClose} name2={"Click button to login"} name1={"Account created"} button={"Sign In"} val={true} mainPage={mainPage}/>
+            <Popup visible={showModel} onClose={handleOnClose} name2={"Click button to login"} name1={"Account created"} button={"Sign In"} val={true} mainPage={mainPage} />
         </div>
     )
 }
