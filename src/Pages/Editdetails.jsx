@@ -15,6 +15,7 @@ const Editdetails = () => {
     emailAddress: "",
     phoneNumber: "",
     houseAddress: "",
+    role: "",
   });
   const [button, setButton] = useState(true);
   const inputs = [
@@ -54,6 +55,7 @@ const Editdetails = () => {
       emailAddress: values.emailAddress,
       phoneNumber: values.phoneNumber,
       houseAddress: values.houseAddress,
+      role: values.role,
     };
     const docRef = doc(db, "users", currentUser.uid);
     setDoc(docRef, data)
@@ -83,11 +85,10 @@ const Editdetails = () => {
         emailAddress: docSnap.data().emailAddress,
         phoneNumber: docSnap.data().phoneNumber,
         houseAddress: docSnap.data().houseAddress,
+        role: docSnap.data().role,
       };
       setValues(data);
-      console.log("there ");
     } else {
-      // doc.data() will be undefined in this case
       console.log("No such document!");
     }
   }

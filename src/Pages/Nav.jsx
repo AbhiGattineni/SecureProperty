@@ -9,7 +9,7 @@ import Dashboard from "./Dashboard";
 
 function Nav() {
   const tabList = {
-    dash: <Dashboard/>,
+    dash: "",
     view: <DisplayImages />,
     add: <Addproperty />,
     edit: <Editdetails />,

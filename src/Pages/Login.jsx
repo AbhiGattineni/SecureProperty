@@ -1,21 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { FcGoogle } from "react-icons/fc";
+import { AiOutlineLine } from "react-icons/ai";
+import { GrFacebookOption } from "react-icons/gr";
+
 import Button from "../components/Button";
 import Index from "../components/Index";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Popup from "./Popup";
-import { FcGoogle } from "react-icons/fc";
-import { AiOutlineLine } from "react-icons/ai";
-import { GrFacebookOption } from "react-icons/gr";
-import firebase from "firebase/compat/app";
-import { signInWithGoogle } from "../firebase";
-import { usersDbRef } from "../firebase";
-import { addDoc } from "firebase/firestore";
+import { usersDbRef, signInWithGoogle, db } from "../firebase";
 
 function Login() {
   const [values, setValues] = useState({
-    email: "",
-    password: "",
+    fullName: "",
+    emailAddress: "",
+    phoneNumber: "",
+    houseAddress: "",
   });
   const [showModel, setShowModel] = useState(false);
   const navigate = useNavigate();
@@ -38,14 +39,29 @@ function Login() {
   ];
 
   const handleGoogle = () => {
-    signInWithGoogle().then((result) => {
-      addDoc(usersDbRef, { username: result.user.displayName, email: result.user.email, phone: result.user.phoneNumber, Role: "User" })
-        .then((usersDbRef) => {
-        })
-        .catch((error) => {
-          console.log(error);
+    signInWithGoogle().then(async (result) => {
+      const data = {
+        fullName: result.user.displayName,
+        emailAddress: result.user.email,
+        phoneNumber: result.user.phoneNumber,
+        role: "User",
+      };
+      // let response = FetchDoc(result);
+      const docRef = doc(db, "users", result.user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.data() === undefined) {
+        setDoc(docRef, data)
+          .then((usersDbRef) => {})
+          .catch((error) => {
+            console.log(error);
+          });
+        setValues({
+          fullName: result.user.displayName,
+          emailAddress: result.user.email,
+          phoneNumber: result.user.phoneNumber,
+          role: "User",
         });
-      setValues({ username: result.user.displayName, email: result.user.email, phone: result.user.phoneNumber, Role: "User" });
+      }
       navigate("/");
     });
 
@@ -63,20 +79,20 @@ function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     const { email, password } = values;
-    try {
-      const user = await signInWithEmailAndPassword(
-        firebase.auth,
-        email,
-        password
-      );
-      window.localStorage.setItem("isLoggedin", true);
-      localStorage.setItem("email", email);
-      navigate("/");
-    } catch (error) {
-      setName2("Invalid email or password");
-      setShowModel(true);
-      setVal(false);
-    }
+    // try {
+    //   const user = await signInWithEmailAndPassword(
+    //     firebase.auth,
+    //     email,
+    //     password
+    //   );
+    //   window.localStorage.setItem("isLoggedin", true);
+    //   localStorage.setItem("email", email);
+    //   navigate("/");
+    // } catch (error) {
+    //   setName2("Invalid email or password");
+    //   setShowModel(true);
+    //   setVal(false);
+    // }
   };
 
   const onChange = (e) => {
@@ -110,8 +126,7 @@ function Login() {
             </div>
           </form>
           <div className="text-center m-2 text-white">
-            <Link
-              to={"/Forgot"} className="text-white">
+            <Link to={"/Forgot"} className="text-white">
               Forgot your password?
             </Link>
           </div>
