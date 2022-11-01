@@ -8,8 +8,6 @@ import Dashboard from "../Pages/Dashboard";
 
 export default function PrivateRoute({ children }) {
   const { currentUser } = useAuth();
-  const [users, setUsers] = useState([]);
-  const [isUser, setIsUser] = useState(false);
   const [isAdmin, setIsAdmin] = useState("false");
 
   // useEffect(() => {
