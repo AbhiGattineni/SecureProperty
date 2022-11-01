@@ -6,11 +6,13 @@ import { MdAddBusiness } from "react-icons/md";
 import { MdDashboard } from "react-icons/md";
 import { ImUsers } from "react-icons/im";
 import { FaUserPlus } from "react-icons/fa";
+import { FaUserCog } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import Viewproperties from "../admin/Viewproperties";
 import ViewUsers from "../admin/ViewUsers";
 import AddUsers from "../admin/AddUsers";
 import Addproperties from "../admin/Addproperties";
+import Changerole from "../admin/Changerole";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
@@ -24,6 +26,7 @@ function Dashboard() {
     addprop: <Addproperties />,
     viewuser: <ViewUsers />,
     adduser: <AddUsers />,
+    changerole: <Changerole />,
   };
   const [activeTab, setActiveTab] = useState("viewuser");
   const Menus = [
@@ -31,6 +34,7 @@ function Dashboard() {
     { title: "ADD PROPERTIES", logo: MdAddBusiness, tabname: "addprop" },
     { title: "VIEW USERS", logo: ImUsers, tabname: "viewuser" },
     { title: "ADD USERS", logo: FaUserPlus, tabname: "adduser" },
+    { title: "CHANGE ROLE", logo: FaUserCog, tabname: "changerole" },
   ];
   const logout = async () => {
     console.log("Executed");
@@ -103,12 +107,11 @@ function Dashboard() {
       </div>
       <div className="flex">
         <div
-          className={`${
-            open ? "w-full lg:w-1/5 md:w-2/6" : "w-14"
-          } duration-500 px-2 text-white h-screen bg-blue-500 pt-5`}
+          className={`${open ? "w-full lg:w-1/5 md:w-2/6" : "w-14"
+            } duration-500 px-2 text-white h-screen bg-blue-500 pt-5`}
         >
           <FaBars
-            className="top-4 absolute left-3 cursor-pointer"
+            className="m-1 cursor-pointer"
             onClick={() => setOpen(!open)}
           />
           <div className={`py-2 flex gap-x-4 items-center px-1`}>
@@ -116,9 +119,8 @@ function Dashboard() {
               <MdDashboard />
             </h1>
             <h1
-              className={`origin-left font-medium text-base duration-300 ${
-                !open && "scale-0"
-              }`}
+              className={`origin-left font-medium text-base duration-300 ${!open && "scale-0"
+                }`}
             >
               DASHBOARD
             </h1>
@@ -137,9 +139,8 @@ function Dashboard() {
                 >
                   <menu.logo />
                   <div
-                    className={`mx-3 origin-left duration-500 text-sm ${
-                      !open && "hidden"
-                    }`}
+                    className={`mx-3 origin-left duration-500 text-sm ${!open && "hidden"
+                      }`}
                   >
                     {menu.title}
                   </div>
