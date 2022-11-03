@@ -1,5 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup,sendPasswordResetEmail } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
 
@@ -22,7 +27,8 @@ export const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 export const signInWithGoogle = () => signInWithPopup(auth, provider);
 
-//adding documents
+//creating references
 export const db = getFirestore(app);
 export const propertiesDbRef = collection(db, "properties");
 export const usersDbRef = collection(db, "users");
+export const propertyImagesDbRef = collection(db, "propertyImages");

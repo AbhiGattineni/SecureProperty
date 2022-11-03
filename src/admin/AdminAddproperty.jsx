@@ -4,7 +4,13 @@ import "firebase/storage";
 
 import Button from "../components/Button";
 import Index from "../components/Index";
-import { auth, propertiesDbRef, storage, usersDbRef } from "../firebase";
+import {
+  auth,
+  propertiesDbRef,
+  propertyImagesDbRef,
+  storage,
+  usersDbRef,
+} from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
@@ -20,7 +26,9 @@ function AdminAddProperties() {
   const [imageAsFile, setImageAsFile] = useState("");
   const inputRef = useRef(null);
   const [owners, setOwners] = useState([]);
+  const [properties, setProperties] = useState([]);
   const [ownerId, setOwnerId] = useState("");
+  const [propertyId, setPropertyId] = useState("");
 
   useEffect(() => {
     const getOwners = async () => {
@@ -40,7 +48,21 @@ function AdminAddProperties() {
   }, []);
 
   useEffect(() => {
-    const getProperties = () => {};
+    const getProperties = async () => {
+      const properties = await getDocs(propertiesDbRef);
+
+      let ownerProperties = [];
+      properties.docs.map((doc) => {
+        if (doc.data().UserUid === ownerId) {
+          const property = {
+            propertyName: doc.data().propertyName,
+            propertyId: doc.id,
+          };
+          ownerProperties.push(property);
+        }
+      });
+      setProperties(ownerProperties);
+    };
     getProperties();
   }, [ownerId]);
 
@@ -55,26 +77,30 @@ function AdminAddProperties() {
     await getDownloadURL(imageRef)
       .then((url) => {
         console.log(url);
-        addDoc(propertiesDbRef, {
-          ...values,
-          propertyUrl: url,
-          UserUid: auth.currentUser.uid,
+        addDoc(propertyImagesDbRef, {
+          ownerId: ownerId,
+          propertyId: propertyId,
+          propertyImageUrl: url,
+          propertyName: "",
         })
-          .then((propertiesDbRef) => {
+          .then((propertiesImagesDbRef) => {
             setValues({
-              propertyName: "",
-              propertyAddress: "",
+              ownerId: "",
+              propertyId: "",
+              propertyImageUrl: "",
+              propertName: "",
             });
             inputRef.current.value = null;
-            alert("Document created");
+            alert("Property image uploaded for owner[Get Name Here]");
           })
           .catch((error) => {
             console.log(error);
           });
         setValues({
-          ...values,
-          propertyUrl: url,
-          UserUid: auth.currentUser.uid,
+          ownerId: ownerId,
+          propertyId: propertyId,
+          propertyImageUrl: url,
+          propertyName: "",
         });
       })
       .catch((error) => {
@@ -120,6 +146,19 @@ function AdminAddProperties() {
                 {owners.map((owner) => (
                   <option key={owner.id} value={owner.id}>
                     {owner.fullName}
+                  </option>
+                ))}
+              </select>
+              <select
+                onChange={(e) => {
+                  setPropertyId(e.target.value);
+                }}
+                className="w-full px-2 py-2 border-2 border-gray-500 rounded-lg"
+              >
+                <option defaultValue=""></option>
+                {properties.map((property) => (
+                  <option key={property.propertyId} value={property.propertyId}>
+                    {property.propertyName}
                   </option>
                 ))}
               </select>

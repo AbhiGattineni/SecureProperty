@@ -46,9 +46,7 @@ function Addproperty() {
     if (imageAsFile == null) return;
 
     const imageRef = ref(storage, `/Images/${imageAsFile.name}`);
-    await uploadBytes(imageRef, imageAsFile).then((snapshot) => {
-      console.log(snapshot);
-    });
+    await uploadBytes(imageRef, imageAsFile).then((snapshot) => {});
     await getDownloadURL(imageRef)
       .then((url) => {
         console.log(url);
@@ -134,7 +132,7 @@ function Addproperty() {
                 onChange={(e) => {
                   setImageAsFile(e.target.files[0]);
                 }}
-              ></input>
+              />
               {Running ? (
                 <div className="mx-5">
                   <div
