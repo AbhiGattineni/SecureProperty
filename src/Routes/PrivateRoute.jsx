@@ -35,5 +35,7 @@ export default function PrivateRoute({ children }) {
   if (currentUser && isAdmin === false) {
     return children;
   }
-  return <Dashboard />;
+  if (currentUser && isAdmin === true) {
+    return <Dashboard />;
+  }
 }

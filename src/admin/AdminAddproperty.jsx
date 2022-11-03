@@ -1,41 +1,57 @@
 import React from "react";
-import Button from "../components/Button";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState, useRef } from "react";
-import Index from "../components/Index";
-import { auth, propertiesDbRef, storage } from "../firebase";
-import { addDoc } from "firebase/firestore";
+import "firebase/storage";
 
-function Addproperty() {
-  const [values, setValues] = useState({
-    propertyName: "",
-    propertyAddress: "",
-  });
+import Button from "../components/Button";
+import Index from "../components/Index";
+import { auth, propertiesDbRef, storage, usersDbRef } from "../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { addDoc, getDocs } from "firebase/firestore";
+import { useEffect } from "react";
+
+function AdminAddProperties() {
   const inputs = [
     {
       id: 1,
-      name: "propertyName",
+      name: "propertyOwner",
       type: "text",
-      placeholder: "Name of property",
+      placeholder: "Owner Name",
     },
     {
       id: 2,
-      name: "propertyAddress",
+      name: "propertyName",
       type: "text",
-      placeholder: "Located Address",
+      placeholder: "Property Name",
     },
   ];
+
+  const [values, setValues] = useState({
+    propertyName: "",
+    propertyAddress: "",
+    propertyOwner: "",
+  });
   const [progress] = useState(0);
-  const [Running] = useState(false);
+  const [running] = useState(false);
   const [imageAsFile, setImageAsFile] = useState("");
   const inputRef = useRef(null);
+  const [owners, setOwners] = useState([]);
 
-  // useEffect(() => {
-  //   const getUsers = async () => {
-  //     const data = await getDocs(propertiesDbRef);
-  //     // setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //   };
-  // }, []);
+  useEffect(() => {
+    const getOwners = async () => {
+      const data = await getDocs(usersDbRef);
+      // setOwners(data.docs.map((doc) => ({ ...doc.data(), name: doc.name })));
+      let names = [];
+      data.docs.map((doc) => {
+        const data = {
+          fullName: doc.data().fullName,
+          id: doc.id,
+        };
+        names.push(data);
+      });
+      setOwners(names);
+    };
+    getOwners();
+  }, []);
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -96,18 +112,6 @@ function Addproperty() {
             break;
         }
       });
-    // await addDoc(propertiesDbRef, values)
-    //   .then((propertiesDbRef) => {
-    //     // setValues({
-    //     //   propertyName: "",
-    //     //   propertyAddress: "",
-    //     //   propertyUrl: "",
-    //     // });
-    //     alert("Document created");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   return (
@@ -135,7 +139,7 @@ function Addproperty() {
                   setImageAsFile(e.target.files[0]);
                 }}
               ></input>
-              {Running ? (
+              {running ? (
                 <div className="mx-5">
                   <div
                     className="bg-green-600 text-center rounded-lg"
@@ -164,4 +168,4 @@ function Addproperty() {
   );
 }
 
-export default Addproperty;
+export default AdminAddProperties;

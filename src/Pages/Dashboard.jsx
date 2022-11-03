@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Viewproperties from "../admin/Viewproperties";
 import ViewUsers from "../admin/ViewUsers";
 import AddUsers from "../admin/AddUsers";
-import Addproperties from "../admin/Addproperties";
+import Addproperties from "../admin/AdminAddproperty";
 import Changerole from "../admin/Changerole";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
@@ -56,48 +56,6 @@ function Dashboard() {
         <nav>
           <ul className="fixed left-0 right-0 min-h-screen bg-gray-200 space-y-4 p-4 transform traslate-x-full md:min-h-0 md:space-y-0 md:space-x-6 md:p-0 md:tarnslate-x-0 md:relative md:flex">
             <li>
-              <button
-                className="text-black"
-                onClick={() => {
-                  console.log("Clicked");
-                  setActiveTab("dash");
-                }}
-              >
-                DASHBOARD
-              </button>
-            </li>
-            <li>
-              <button
-                className="text-black"
-                onClick={() => {
-                  console.log("Clicked");
-                  setActiveTab("view");
-                }}
-              >
-                VIEW PROPERTY
-              </button>
-            </li>
-            <li>
-              <button
-                className="text-black"
-                onClick={() => {
-                  setActiveTab("add");
-                }}
-              >
-                ADD PROPERTY
-              </button>
-            </li>
-            <li>
-              <button
-                className="text-black"
-                onClick={() => {
-                  setActiveTab("edit");
-                }}
-              >
-                EDIT PROFILE
-              </button>
-            </li>
-            <li>
               <button onClick={logout} name="LOGOUT" className="bg-gray-200">
                 LOGOUT
               </button>
@@ -107,8 +65,9 @@ function Dashboard() {
       </div>
       <div className="flex">
         <div
-          className={`${open ? "w-full lg:w-1/5 md:w-2/6" : "w-14"
-            } duration-500 px-2 text-white h-screen bg-blue-500 pt-5`}
+          className={`${
+            open ? "w-full lg:w-1/5 md:w-2/6" : "w-14"
+          } duration-500 px-2 text-white h-screen bg-blue-500 pt-5`}
         >
           <FaBars
             className="m-1 cursor-pointer"
@@ -119,8 +78,9 @@ function Dashboard() {
               <MdDashboard />
             </h1>
             <h1
-              className={`origin-left font-medium text-base duration-300 ${!open && "scale-0"
-                }`}
+              className={`origin-left font-medium text-base duration-300 ${
+                !open && "scale-0"
+              }`}
             >
               DASHBOARD
             </h1>
@@ -139,8 +99,9 @@ function Dashboard() {
                 >
                   <menu.logo />
                   <div
-                    className={`mx-3 origin-left duration-500 text-sm ${!open && "hidden"
-                      }`}
+                    className={`mx-3 origin-left duration-500 text-sm ${
+                      !open && "hidden"
+                    }`}
                   >
                     {menu.title}
                   </div>
@@ -149,8 +110,8 @@ function Dashboard() {
             ))}
           </ul>
         </div>
-        <div className="container-fluid py-32">
-          <div className="grid grid-cols-1 gap-4 place-items-center">
+        <div className="container-fluid">
+          <div className="place-items-center">
             <div className="drop-shadow-lg shadow-black text-2xl">
               {tabList[activeTab]}
             </div>

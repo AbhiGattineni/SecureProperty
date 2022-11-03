@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { getDocs } from 'firebase/firestore';
+import { getDocs } from "firebase/firestore";
 import { propertiesDbRef } from "../firebase";
 
 function DisplayImages() {
   const tabs = [
-    { name: "property 1", link: "#", img: "/Images/lib1.jpg", },
-    { name: "property 2", link: "#", img: "/Images/lib2.jpg", },
-    { name: "property 3", link: "#", img: "/Images/lib5.jpg", },
+    { name: "property 1", link: "#", img: "/Images/lib1.jpg" },
+    { name: "property 2", link: "#", img: "/Images/lib2.jpg" },
+    { name: "property 3", link: "#", img: "/Images/lib5.jpg" },
   ];
   const [users, setUsers] = useState([]);
   const [openTab, setOpenTab] = useState("property 1");
@@ -15,10 +15,10 @@ function DisplayImages() {
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(propertiesDbRef);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    }
-    getUsers()
-  }, [])
+      // setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getUsers();
+  }, []);
   return (
     <div className="bg-white">
       <div className="grid grid-cols-4">
@@ -26,9 +26,7 @@ function DisplayImages() {
           <ul className="grid grid-cols-1 divide-y">
             {tabs.map((tab) => (
               <li key={tab.name} className="py-3 hover:bg-gray-300">
-                <a
-                  href={tab.link}
-                  onClick={() => setOpenTab(tab.name)}>
+                <a href={tab.link} onClick={() => setOpenTab(tab.name)}>
                   {tab.name}
                 </a>
               </li>
@@ -39,7 +37,8 @@ function DisplayImages() {
           {tabs.map((tab) => (
             <div
               key={tab.name}
-              className={tab.name === openTab ? "block" : "hidden"}>
+              className={tab.name === openTab ? "block" : "hidden"}
+            >
               <div className="relative w-6 mb-3">
                 <select className="p-2 text-black bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
                   <option>2022</option>
@@ -56,14 +55,19 @@ function DisplayImages() {
                 {users.map((user) => (
                   <div>
                     <div>
-                      <img className="w-full h-40" src={user.propertyUrl} alt="Property" />
+                      <img
+                        className="w-full h-40"
+                        src={user.propertyUrl}
+                        alt="Property"
+                      />
                     </div>
                     <div className="pb-1 bg-gray-300 text-center font-medium relative h-10">
-                      <div className="text-xl absolute inset-x-0 bottom-0 h-10 uppercase">{user.propertyName}</div>
+                      <div className="text-xl absolute inset-x-0 bottom-0 h-10 uppercase">
+                        {user.propertyName}
+                      </div>
                     </div>
                   </div>
-                )
-                )}
+                ))}
               </div>
             </div>
           ))}
