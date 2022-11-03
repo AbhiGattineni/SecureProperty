@@ -20,7 +20,6 @@ function AdminAddProperties() {
   const [imageAsFile, setImageAsFile] = useState("");
   const inputRef = useRef(null);
   const [owners, setOwners] = useState([]);
-  const [owner, setOwner] = useState("");
   const [ownerId, setOwnerId] = useState("");
 
   useEffect(() => {
@@ -39,6 +38,11 @@ function AdminAddProperties() {
     };
     getOwners();
   }, []);
+
+  useEffect(() => {
+    const getProperties = () => {};
+    getProperties();
+  }, [ownerId]);
 
   const addNewProperty = async (event) => {
     event.preventDefault();
@@ -97,13 +101,6 @@ function AdminAddProperties() {
       });
   };
 
-  const handleOwner = (e) => {
-    console.log(owner);
-    setOwner(e.target.value);
-    setOwnerId(e.target.value.id);
-    console.log(ownerId);
-  };
-
   return (
     <div className="container-fluid py-40">
       <div className="grid grid-cols-1 gap-4 place-items-center">
@@ -114,12 +111,16 @@ function AdminAddProperties() {
           <div className="container">
             <form onSubmit={addNewProperty} className="grid grid-cols-1 gap-3">
               <select
-                onChange={handleOwner}
+                onChange={(e) => {
+                  setOwnerId(e.target.value);
+                }}
                 className="w-full px-2 py-2 border-2 border-gray-500 rounded-lg"
               >
-                <option defaultValue="" selected></option>
+                <option defaultValue=""></option>
                 {owners.map((owner) => (
-                  <option key={owner.id}>{owner.fullName}</option>
+                  <option key={owner.id} value={owner.id}>
+                    {owner.fullName}
+                  </option>
                 ))}
               </select>
               <input
