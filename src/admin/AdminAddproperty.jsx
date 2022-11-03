@@ -10,21 +10,6 @@ import { addDoc, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
 
 function AdminAddProperties() {
-  const inputs = [
-    {
-      id: 1,
-      name: "propertyOwner",
-      type: "text",
-      placeholder: "Owner Name",
-    },
-    {
-      id: 2,
-      name: "propertyName",
-      type: "text",
-      placeholder: "Property Name",
-    },
-  ];
-
   const [values, setValues] = useState({
     propertyName: "",
     propertyAddress: "",
@@ -35,6 +20,8 @@ function AdminAddProperties() {
   const [imageAsFile, setImageAsFile] = useState("");
   const inputRef = useRef(null);
   const [owners, setOwners] = useState([]);
+  const [owner, setOwner] = useState("");
+  const [ownerId, setOwnerId] = useState("");
 
   useEffect(() => {
     const getOwners = async () => {
@@ -52,10 +39,6 @@ function AdminAddProperties() {
     };
     getOwners();
   }, []);
-
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
 
   const addNewProperty = async (event) => {
     event.preventDefault();
@@ -114,6 +97,13 @@ function AdminAddProperties() {
       });
   };
 
+  const handleOwner = (e) => {
+    console.log(owner);
+    setOwner(e.target.value);
+    setOwnerId(e.target.value.id);
+    console.log(ownerId);
+  };
+
   return (
     <div className="container-fluid py-40">
       <div className="grid grid-cols-1 gap-4 place-items-center">
@@ -123,14 +113,15 @@ function AdminAddProperties() {
           </h1>
           <div className="container">
             <form onSubmit={addNewProperty} className="grid grid-cols-1 gap-3">
-              {inputs.map((input) => (
-                <Index
-                  key={input.id}
-                  {...input}
-                  value={values[input.name]}
-                  onChange={onChange}
-                />
-              ))}
+              <select
+                onChange={handleOwner}
+                className="w-full px-2 py-2 border-2 border-gray-500 rounded-lg"
+              >
+                <option defaultValue="" selected></option>
+                {owners.map((owner) => (
+                  <option key={owner.id}>{owner.fullName}</option>
+                ))}
+              </select>
               <input
                 className="form-control w-1/3 px-3 ml-12 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded"
                 type="file"
