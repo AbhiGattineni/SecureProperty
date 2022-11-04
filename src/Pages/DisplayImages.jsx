@@ -4,11 +4,7 @@ import { getDocs } from "firebase/firestore";
 import { propertiesDbRef } from "../firebase";
 
 function DisplayImages() {
-  const tabs = [
-    { name: "property 1", link: "#", img: "/Images/lib1.jpg" },
-    { name: "property 2", link: "#", img: "/Images/lib2.jpg" },
-    { name: "property 3", link: "#", img: "/Images/lib5.jpg" },
-  ];
+  const [tabs, setTabs] = useState([]);
   const [users, setUsers] = useState([]);
   const [openTab, setOpenTab] = useState("property 1");
 
@@ -16,6 +12,30 @@ function DisplayImages() {
     const getUsers = async () => {
       const data = await getDocs(propertiesDbRef);
       // setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      let names = [];
+      data.docs.map((doc) => {
+        const data = {
+          propertyName : doc.data().propertyName,
+        };
+        names.push(data);
+      });
+      setTabs(names);
+    };
+    getUsers();
+  }, []);
+  useEffect(() => {
+    const getUsers = async () => {
+      const data = await getDocs(propertiesDbRef);
+      // setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      let userName = [];
+      data.docs.map((doc) => {
+        const data = {
+          propertyName : doc.data().propertyName,
+          propertyUrl : doc.data().propertyImageUrl,
+        };
+        userName.push(data);
+      });
+      setUsers(userName);
     };
     getUsers();
   }, []);
@@ -24,20 +44,20 @@ function DisplayImages() {
       <div className="grid grid-cols-4">
         <div className="text-center">
           <ul className="grid grid-cols-1 divide-y">
-            {tabs.map((tab) => (
-              <li key={tab.name} className="py-3 hover:bg-gray-300">
-                <a href={tab.link} onClick={() => setOpenTab(tab.name)}>
-                  {tab.name}
+            {tabs.map((tab,index) => (
+              <li key={index} className="py-3 hover:bg-gray-300">
+                <a href='#' onClick={() => setOpenTab(tab.propertyName)}>
+                  {tab.propertyName}
                 </a>
               </li>
             ))}
           </ul>
         </div>
         <div className="p-3 col-span-3 bg-gray-400">
-          {tabs.map((tab) => (
+          {tabs.map((tab,index) => (
             <div
-              key={tab.name}
-              className={tab.name === openTab ? "block" : "hidden"}
+              key={index}
+              className={tab.propertyName === openTab ? "block" : "hidden"}
             >
               <div className="relative w-6 mb-3">
                 <select className="p-2 text-black bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
