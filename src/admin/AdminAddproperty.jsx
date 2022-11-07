@@ -6,13 +6,14 @@ import Button from "../components/Button";
 import Index from "../components/Index";
 import {
   auth,
+  db,
   propertiesDbRef,
   propertyImagesDbRef,
   storage,
   usersDbRef,
 } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { addDoc, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
 
 function AdminAddProperties() {
@@ -29,7 +30,8 @@ function AdminAddProperties() {
   const [properties, setProperties] = useState([]);
   const [ownerId, setOwnerId] = useState("");
   const [propertyId, setPropertyId] = useState("");
-
+  // console.log(propertyId)
+  const ImageDbRef = collection(db,ownerId);
   useEffect(() => {
     const getOwners = async () => {
       const data = await getDocs(usersDbRef);
@@ -77,13 +79,13 @@ function AdminAddProperties() {
     await getDownloadURL(imageRef)
       .then((url) => {
         console.log(url);
-        addDoc(propertyImagesDbRef, {
+        addDoc(ImageDbRef, {
           ownerId: ownerId,
           propertyId: propertyId,
           propertyImageUrl: url,
           propertyName: "",
         })
-          .then((propertiesImagesDbRef) => {
+          .then((ImageDbRef) => {
             setValues({
               ownerId: "",
               propertyId: "",
@@ -91,7 +93,7 @@ function AdminAddProperties() {
               propertName: "",
             });
             inputRef.current.value = null;
-            alert("Property image uploaded for owner[Get Name Here]");
+            alert("Property image uploaded for owner [Get Name Here]");
           })
           .catch((error) => {
             console.log(error);
