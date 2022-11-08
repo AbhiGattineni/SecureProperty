@@ -51,7 +51,7 @@ function AdminAddProperties() {
 
   useEffect(() => {
     const getProperties = async () => {
-      const properties = await getDocs(propertiesDbRef);
+      const properties = await getDocs(propertyImagesDbRef);
 
       let ownerProperties = [];
       properties.docs.map((doc) => {
