@@ -16,6 +16,8 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
 
+import UploadImage from "../components/UploadImage";
+
 function AdminAddProperties() {
   const [values, setValues] = useState({
     propertyName: "",
@@ -30,8 +32,8 @@ function AdminAddProperties() {
   const [properties, setProperties] = useState([]);
   const [ownerId, setOwnerId] = useState("");
   const [propertyId, setPropertyId] = useState("");
-  // console.log(propertyId)
-  const ImageDbRef = collection(db,ownerId);
+  const [url, setUrl] = useState("");
+
   useEffect(() => {
     const getOwners = async () => {
       const data = await getDocs(usersDbRef);
@@ -51,7 +53,7 @@ function AdminAddProperties() {
 
   useEffect(() => {
     const getProperties = async () => {
-      const properties = await getDocs(propertyImagesDbRef);
+      const properties = await getDocs(propertiesDbRef);
 
       let ownerProperties = [];
       properties.docs.map((doc) => {
@@ -73,36 +75,32 @@ function AdminAddProperties() {
     if (imageAsFile == null) return;
 
     const imageRef = ref(storage, `/Images/${imageAsFile.name}`);
-    await uploadBytes(imageRef, imageAsFile).then((snapshot) => {
-      console.log(snapshot);
-    });
-    await getDownloadURL(imageRef)
-      .then((url) => {
-        console.log(url);
-        addDoc(ImageDbRef, {
-          ownerId: ownerId,
-          propertyId: propertyId,
-          propertyImageUrl: url,
-          propertyName: "",
-        })
-          .then((ImageDbRef) => {
-            setValues({
-              ownerId: "",
-              propertyId: "",
-              propertyImageUrl: "",
-              propertName: "",
-            });
-            inputRef.current.value = null;
-            alert("Property image uploaded for owner [Get Name Here]");
+    await uploadBytes(imageRef, imageAsFile)
+      .then((snapshot) => {
+        getDownloadURL(imageRef).then((url) => {
+          console.log(url);
+          addDoc(propertyImagesDbRef, {
+            ...values,
+            propertyUrl: url,
+            UserUid: auth.currentUser.uid,
           })
-          .catch((error) => {
-            console.log(error);
-          });
+            .then((propertiesDbRef) => {
+              setValues({
+                propertyName: "",
+                propertyAddress: "",
+              });
+              inputRef.current.value = null;
+              alert("Document created");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        });
+
         setValues({
-          ownerId: ownerId,
-          propertyId: propertyId,
-          propertyImageUrl: url,
-          propertyName: "",
+          ...values,
+          propertyUrl: url,
+          UserUid: auth.currentUser.uid,
         });
       })
       .catch((error) => {
@@ -127,6 +125,10 @@ function AdminAddProperties() {
             break;
         }
       });
+  };
+
+  const getUrl = (e) => {
+    setUrl(e);
   };
 
   return (
@@ -171,7 +173,7 @@ function AdminAddProperties() {
                 onChange={(e) => {
                   setImageAsFile(e.target.files[0]);
                 }}
-              ></input>
+              />
               {running ? (
                 <div className="mx-5">
                   <div

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
 
-const UploadImage = ({ setUrl }) => {
+const UploadImage = ({ getUrl }) => {
   const inputRef = useRef(null);
   const [imageAsFile, setImageAsFile] = useState("");
 
@@ -14,27 +14,10 @@ const UploadImage = ({ setUrl }) => {
     await uploadBytes(imageRef, imageAsFile).then((snapshot) => {});
     await getDownloadURL(imageRef)
       .then((url) => {
-        setUrl(url);
+        getUrl(url);
       })
       .catch((error) => {
-        switch (error.code) {
-          case "storage/object-not-found":
-            console.log(error.code);
-            break;
-          case "storage/unauthorized":
-            console.log(error.code);
-            break;
-          case "storage/canceled":
-            console.log(error.code);
-            break;
-
-          case "storage/unknown":
-            console.log(error.code);
-            break;
-
-          default:
-            break;
-        }
+        console.log("error", error);
       });
   };
 

@@ -29,7 +29,6 @@ export const signInWithGoogle = () => signInWithPopup(auth, provider);
 
 //creating references
 export const db = getFirestore(app);
-// export const propertiesDbRef = collection(db, auth.currentUser.uid);
 export const propertiesDbRef = collection(db, "properties");
 export const usersDbRef = collection(db, "users");
 export const propertyImagesDbRef = collection(db, "propertyImages");
