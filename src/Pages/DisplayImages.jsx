@@ -9,14 +9,15 @@ function DisplayImages() {
   const [propertyImages, setPropertyImages] = useState([]);
   const [openTab, setOpenTab] = useState();
   const [propertyId, setPropertyId] = useState("");
-  const [tabsLength, setTabsLength] = useState(false);
+  // const [tabsLength, setTabsLength] = useState(false);
   const [usersLength, setUsersLength] = useState(false);
+  const [propertyAddress, setPropertyAddress] = useState("");
+  const [propertyAddedDate, setPropertyAddedDate] = useState("");
 
   useEffect(() => {
     const getProperties = async () => {
       const data = await getDocs(propertiesDbRef);
       let properties = [];
-      let propertyimg = [];
       data.docs.map((doc) => {
         const data = {
           propertyId: doc.id,
@@ -24,29 +25,22 @@ function DisplayImages() {
           propertyAddress: doc.data().propertyAddress,
           UserUid: doc.data().UserUid,
           propertyUrl: doc.data().propertyUrl,
+          propertyAddedDate: doc.data().propertyAddedDate,
         };
-        // const img = {
-        //   UserUid: doc.data().UserUid,
-        //   propertyAddress: doc.data().propertyAddress,
-        //   imageurl: doc.data().propertyUrl,
-        // };
         properties.push(data);
-        // propertyimg.push(img);
       });
       setProperties(properties);
-      // setImage(propertyimg);
-      properties.forEach((property) => {
-        if (property.UserUid === auth.currentUser.uid) {
-          setTabsLength(true);
-        }
-      });
+      // properties.forEach((property) => {
+      //   if (property.UserUid === auth.currentUser.uid) {
+      //     setTabsLength(true);
+      //   }
+      // });
     };
     getProperties();
   }, []);
   useEffect(() => {
     const getPropertyImages = async () => {
       const data = await getDocs(propertyImagesDbRef);
-      // setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       let propertyImages = [];
       data.docs.map((doc) => {
         if (doc.data().ownerId === auth.currentUser.uid) {
@@ -68,6 +62,9 @@ function DisplayImages() {
     setOpenTab(e.propertyAddress);
     setPropertyId(e.propertyId);
     setImage(e.propertyUrl);
+    setPropertyAddress(e.propertyAddress);
+    setPropertyAddedDate(e.propertyAddedDate);
+    console.log(e);
   };
   return (
     <div className="bg-white">
@@ -102,29 +99,13 @@ function DisplayImages() {
         </div>
         <div className="p-3 col-span-3 bg-gray-400">
           <div className="grid justify-items-center">
-            <div class="block p-1 rounded-lg shadow-lg bg-white max-w-sm ">
-              {/* {images.map((imgs, index) => {
-                if (
-                  imgs.propertyAddress === openTab &&
-                  imgs.UserUid === auth.currentUser.uid
-                ) {
-                  return (
-                    <div>
-                      <img
-                        className="w-full h-40"
-                        src={imgs.imageurl}
-                        alt="Property"
-                      />
-                      <small>property address</small>
-                      <small>property added date</small>
-                    </div>
-                  );
-                }
-              })} */}
+            <div className="block p-1 rounded-lg shadow-lg bg-white max-w-sm ">
               <div>
                 <img className="w-full h-40" src={image} alt="Property" />
-                <small>property address</small>
-                <small>property added date</small>
+                <div className="grid grid-rows">
+                  <small>Address:{propertyAddress}</small>
+                  <small>Date: {propertyAddedDate}</small>
+                </div>
               </div>
             </div>
           </div>
@@ -175,9 +156,9 @@ function DisplayImages() {
             </div>
           ))}
           {usersLength ? null : (
-            <div class="flex justify-center">
-              <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
-                <p class="text-gray-700 text-base mb-4 font-bold">
+            <div className="flex justify-center">
+              <div className="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
+                <p className="text-gray-700 text-base mb-4 font-bold">
                   Oops!.. There is no images to show.
                 </p>
               </div>
