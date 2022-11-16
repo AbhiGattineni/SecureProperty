@@ -13,6 +13,7 @@ function DisplayImages() {
   const [usersLength, setUsersLength] = useState(false);
   const [propertyAddress, setPropertyAddress] = useState("");
   const [propertyAddedDate, setPropertyAddedDate] = useState("");
+  const [tabSelected, setTabSelected] = useState(false);
 
   useEffect(() => {
     const getProperties = async () => {
@@ -64,7 +65,7 @@ function DisplayImages() {
     setImage(e.propertyUrl);
     setPropertyAddress(e.propertyAddress);
     setPropertyAddedDate(e.propertyAddedDate);
-    console.log(e);
+    setTabSelected(true);
   };
   return (
     <div className="bg-white">
@@ -98,17 +99,19 @@ function DisplayImages() {
           </ul>
         </div>
         <div className="p-3 col-span-3 bg-gray-400">
-          <div className="grid justify-items-center">
-            <div className="block p-1 rounded-lg shadow-lg bg-white max-w-sm ">
-              <div>
-                <img className="w-full h-40" src={image} alt="Property" />
-                <div className="grid grid-rows">
-                  <small>Address:{propertyAddress}</small>
-                  <small>Date: {propertyAddedDate}</small>
+          {tabSelected ? (
+            <div className="grid justify-items-center">
+              <div className="block p-1 rounded-lg shadow-lg bg-white max-w-sm ">
+                <div>
+                  <img className="w-full h-40" src={image} alt="Property" />
+                  <div className="grid grid-rows">
+                    <small>Address:{propertyAddress}</small>
+                    <small>Date: {propertyAddedDate}</small>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : null}
           {properties.map((property, index) => (
             <div
               key={index}
