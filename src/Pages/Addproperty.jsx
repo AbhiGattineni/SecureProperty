@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import Index from "../components/Index";
 import { auth, propertiesDbRef, storage } from "../firebase";
 import { addDoc } from "firebase/firestore";
+import { mockComponent } from "react-dom/test-utils";
 
 function Addproperty() {
   const [values, setValues] = useState({
@@ -45,23 +46,34 @@ function Addproperty() {
     event.preventDefault();
     if (imageAsFile == null) return;
 
+    var date = new Date();
+    var dd = String(date.getDate()).padStart(2, "0");
+    var mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = date.getFullYear();
+
+    date = mm + "/" + dd + "/" + yyyy;
     const imageRef = ref(storage, `/Images/${imageAsFile.name}`);
     await uploadBytes(imageRef, imageAsFile).then((snapshot) => {});
     await getDownloadURL(imageRef)
       .then((url) => {
-        console.log(url);
         addDoc(propertiesDbRef, {
           ...values,
           propertyUrl: url,
           UserUid: auth.currentUser.uid,
+          propertyAddedDate: date,
+          // propertyAddedDate:
         })
           .then((propertiesDbRef) => {
+            alert(
+              "New Property Added" +
+                values.propertyName +
+                values.propertyAddress
+            );
             setValues({
               propertyName: "",
               propertyAddress: "",
             });
             inputRef.current.value = null;
-            alert("Document created");
           })
           .catch((error) => {
             console.log(error);

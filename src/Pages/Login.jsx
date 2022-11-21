@@ -8,7 +8,7 @@ import { GrFacebookOption } from "react-icons/gr";
 import Button from "../components/Button";
 import Index from "../components/Index";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import Popup from "./Popup";
+import Popup from "../components/Popup";
 import { usersDbRef, signInWithGoogle, db } from "../firebase";
 
 function Login() {
