@@ -24,8 +24,7 @@ export default function PrivateRoute({ children }) {
   async function FetchData() {
     const docRef = doc(db, "users", currentUser.uid);
     const docSnap = await getDoc(docRef);
-    console.log(docSnap.data().role);
-
+    console.log(docSnap.data());
     if (docSnap.data().role === "Admin" ? setIsAdmin(true) : setIsAdmin(false));
   }
 

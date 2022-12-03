@@ -1,17 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+
 import Button from "../components/Button";
 import Index from "../components/Index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, usersDbRef } from "../firebase";
-import { addDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 import Popup from "../components/Popup";
 
 function Signup() {
   const [values, setValues] = useState({
-    username: "",
     email: "",
-    phone: "",
     password: "",
     repassword: "",
   });
@@ -20,18 +19,18 @@ function Signup() {
   const [mainPage, setMainPage] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const inputs = [
+    // {
+    //   id: 1,
+    //   name: "username",
+    //   type: "text",
+    //   placeholder: "Username",
+    //   errorMessage:
+    //     "Username should be 4-16 characters and should not contain spaces and special characters",
+    //   pattern: "^[A-Za-z0-9]{4,16}$",
+    //   required: true,
+    // },
     {
       id: 1,
-      name: "username",
-      type: "text",
-      placeholder: "Username",
-      errorMessage:
-        "Username should be 4-16 characters and should not contain spaces and special characters",
-      pattern: "^[A-Za-z0-9]{4,16}$",
-      required: true,
-    },
-    {
-      id: 2,
       name: "email",
       type: "text",
       placeholder: "Email",
@@ -40,17 +39,17 @@ function Signup() {
         "^[a-zA-Z0-9]+(?:.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:.[a-zA-Z0-9]+)*$",
       required: true,
     },
+    // {
+    //   id: 3,
+    //   name: "phone",
+    //   type: "text",
+    //   placeholder: "Phone",
+    //   errorMessage: "Phone number is not valid",
+    //   pattern: "^[0-9]{10}$",
+    //   required: true,
+    // },
     {
-      id: 3,
-      name: "phone",
-      type: "text",
-      placeholder: "Phone",
-      errorMessage: "Phone number is not valid",
-      pattern: "^[0-9]{10}$",
-      required: true,
-    },
-    {
-      id: 4,
+      id: 2,
       name: "password",
       type: "password",
       placeholder: "Password",
@@ -61,7 +60,7 @@ function Signup() {
       required: true,
     },
     {
-      id: 5,
+      id: 3,
       name: "repassword",
       type: "password",
       placeholder: "Confirm Password",
@@ -71,28 +70,36 @@ function Signup() {
     },
   ];
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const { username, email, phone, password } = values;
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      addDoc(usersDbRef, { ...values, Role: "User" })
-        .then((usersDbRef) => {
+    const { email, password } = values;
+    createUserWithEmailAndPassword(auth, email, password).then(
+      async (userCredential) => {
+        const data = {
+          fullName: userCredential.user.displayName,
+          emailAddress: userCredential.user.email,
+          phoneNumber: userCredential.user.phoneNumber,
+          role: "User",
+        };
+
+        const docRef = doc(db, "users", userCredential.user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.data() === undefined) {
+          setDoc(docRef, data)
+            .then((usersDbRef) => {})
+            .catch((error) => {
+              console.log(error);
+            });
           setValues({
-            email: "",
-            username: "",
-            phone: "",
+            fullName: userCredential.user.displayName,
+            emailAddress: userCredential.user.email,
+            phoneNumber: userCredential.user.phoneNumber,
+            role: "User",
           });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      setValues({ ...values, Role: "User" });
-      setErrorPassword(false);
-      setShowModel(true);
-    } catch (error) {
-      setErrorPassword(true);
-    }
+        }
+        navigate("/");
+      }
+    );
   };
 
   const handleOnClose = () => {

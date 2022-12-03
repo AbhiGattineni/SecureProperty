@@ -9,14 +9,12 @@ import Button from "../components/Button";
 import Index from "../components/Index";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Popup from "../components/Popup";
-import { usersDbRef, signInWithGoogle, db } from "../firebase";
+import { signInWithGoogle, db, auth } from "../firebase";
 
 function Login() {
   const [values, setValues] = useState({
-    fullName: "",
-    emailAddress: "",
-    phoneNumber: "",
-    houseAddress: "",
+    email: "",
+    password: "",
   });
   const [showModel, setShowModel] = useState(false);
   const navigate = useNavigate();
@@ -46,6 +44,36 @@ function Login() {
         phoneNumber: result.user.phoneNumber,
         role: "User",
       };
+
+      const docRef = doc(db, "users", result.user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.data() === undefined) {
+        setDoc(docRef, data)
+          .then((usersDbRef) => {})
+          .catch((error) => {
+            console.log(error);
+          });
+        setValues({
+          fullName: result.user.displayName,
+          emailAddress: result.user.email,
+          phoneNumber: result.user.phoneNumber,
+          role: "User",
+        });
+      }
+      navigate("/");
+    });
+  };
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const { email, password } = values;
+    signInWithEmailAndPassword(auth, email, password).then(async (result) => {
+      const data = {
+        fullName: result.user.displayName,
+        emailAddress: result.user.email,
+        phoneNumber: result.user.phoneNumber,
+        role: "User",
+      };
       // let response = FetchDoc(result);
       const docRef = doc(db, "users", result.user.uid);
       const docSnap = await getDoc(docRef);
@@ -64,35 +92,6 @@ function Login() {
       }
       navigate("/");
     });
-
-    // firebase
-    //   .auth()
-    //   .signInWithPopup(google_provider)
-    //   .then((re) => {
-    //     console.log(re);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  };
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    const { email, password } = values;
-    // try {
-    //   const user = await signInWithEmailAndPassword(
-    //     firebase.auth,
-    //     email,
-    //     password
-    //   );
-    //   window.localStorage.setItem("isLoggedin", true);
-    //   localStorage.setItem("email", email);
-    //   navigate("/");
-    // } catch (error) {
-    //   setName2("Invalid email or password");
-    //   setShowModel(true);
-    //   setVal(false);
-    // }
   };
 
   const onChange = (e) => {
