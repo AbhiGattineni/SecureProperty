@@ -11,9 +11,8 @@ import PrivateRoute from "./Routes/PrivateRoute.jsx";
 import Dashboard from "./Pages/Dashboard";
 
 function App() {
-  const loggedIn = window.localStorage.getItem("isLoggedin");
   return (
-    <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
+    <div className="h-max bg-gradient-to-r from-cyan-500 to-blue-500">
       <Router>
         <AuthProvider>
           <Routes>

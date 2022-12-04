@@ -94,8 +94,8 @@ const Editdetails = () => {
   }
 
   return (
-    <div className="container-fluid py-32">
-      <div className="grid grid-cols-1 gap-4 place-items-center">
+    <div className="container-fluid">
+      <div className="grid h-screen grid-cols-1 gap-4 place-items-center">
         <div className="bg-white/30 w-2/3 lg:w-2/3 md:2/3 rounded-lg drop-shadow-2xl border-1 border-white p-3">
           <h1 className="grid grid-flow-col text-center p-10 font-bold text-blue-700 text-2xl">
             EDIT DETAILS
