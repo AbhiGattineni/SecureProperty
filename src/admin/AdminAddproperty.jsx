@@ -41,7 +41,7 @@ function AdminAddProperties() {
       let names = [];
       data.docs.map((doc) => {
         const data = {
-          fullName: doc.data().fullName,
+          fullEmail: doc.data().emailAddress,
           id: doc.id,
         };
         names.push(data);
@@ -149,7 +149,7 @@ function AdminAddProperties() {
                 <option defaultValue=""></option>
                 {owners.map((owner) => (
                   <option key={owner.id} value={owner.id}>
-                    {owner.fullName}
+                    {owner.fullEmail}
                   </option>
                 ))}
               </select>
