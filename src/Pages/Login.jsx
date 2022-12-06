@@ -9,7 +9,7 @@ import Button from "../components/Button";
 import Index from "../components/Index";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Popup from "../components/Popup";
-import { signInWithGoogle, db, auth } from "../firebase";
+import { signInWithGoogle, db, auth, signInWithFacebook } from "../firebase";
 
 function Login() {
   const [values, setValues] = useState({
@@ -94,6 +94,37 @@ function Login() {
     });
   };
 
+  const handleFacebook = () => {
+    console.log("before method calling");
+    signInWithFacebook()
+      .then(async (result) => {
+        const data = {
+          fullName: result.user.displayName,
+          emailAddress: result.user.email,
+          phoneNumber: result.user.phoneNumber,
+          role: "User",
+        };
+        // let response = FetchDoc(result);
+        const docRef = doc(db, "users", result.user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.data() === undefined) {
+          setDoc(docRef, data)
+            .then((usersDbRef) => {})
+            .catch((error) => {
+              console.log(error);
+            });
+          setValues({
+            fullName: result.user.displayName,
+            emailAddress: result.user.email,
+            phoneNumber: result.user.phoneNumber,
+            role: "User",
+          });
+        }
+        navigate("/");
+      })
+      .catch((error) => {});
+  };
+
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -144,7 +175,7 @@ function Login() {
             <button onClick={handleGoogle}>
               <FcGoogle className="h-10 w-10 bg-slate-200 drop-shadow-lg p-1 rounded-full" />
             </button>
-            <button>
+            <button onClick={handleFacebook}>
               <GrFacebookOption className="h-10 w-10 bg-blue-800 text-white drop-shadow-lg p-1 rounded-full" />
             </button>
             <div />

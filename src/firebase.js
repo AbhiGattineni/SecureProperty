@@ -4,6 +4,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  FacebookAuthProvider,
 } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
@@ -24,8 +25,10 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 
 //Google authentication
-const provider = new GoogleAuthProvider();
-export const signInWithGoogle = () => signInWithPopup(auth, provider);
+const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
+export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
+export const signInWithFacebook = () => signInWithPopup(auth, facebookProvider);
 
 //creating references
 export const db = getFirestore(app);
