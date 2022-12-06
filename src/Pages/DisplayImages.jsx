@@ -14,6 +14,7 @@ function DisplayImages() {
   const [propertyAddress, setPropertyAddress] = useState("");
   const [propertyAddedDate, setPropertyAddedDate] = useState("");
   const [tabSelected, setTabSelected] = useState(false);
+  let serial = 0;
 
   useEffect(() => {
     const getProperties = async () => {
@@ -81,7 +82,7 @@ function DisplayImages() {
                         key={index}
                         onClick={() => onButtonClick(property)}
                       >
-                        {property.propertyName}
+                        {(serial += 1) + ")" + property.propertyName}
                       </button>
                     </li>
                   );

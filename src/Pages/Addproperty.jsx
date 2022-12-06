@@ -52,78 +52,67 @@ function Addproperty() {
       return alert("Invalid Details");
     }
 
-    var date = new Date();
-    var dd = String(date.getDate()).padStart(2, "0");
-    var mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
-    var yyyy = date.getFullYear();
+    if (imageAsFile.type === "image/jpeg") {
+      var date = new Date();
+      var dd = String(date.getDate()).padStart(2, "0");
+      var mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
+      var yyyy = date.getFullYear();
 
-    date = mm + "/" + dd + "/" + yyyy;
-    const imageRef = ref(storage, `/Images/${imageAsFile.name}`);
-    await uploadBytes(imageRef, imageAsFile).then((snapshot) => {});
-    await getDownloadURL(imageRef)
-      .then((url) => {
-        addDoc(propertiesDbRef, {
-          ...values,
-          propertyUrl: url,
-          UserUid: auth.currentUser.uid,
-          propertyAddedDate: date,
-          // propertyAddedDate:
-        })
-          .then((propertiesDbRef) => {
-            alert(
-              "New Property Added" +
-                values.propertyName +
-                values.propertyAddress
-            );
-            setValues({
-              propertyName: "",
-              propertyAddress: "",
-            });
-            inputRef.current.value = null;
+      date = mm + "/" + dd + "/" + yyyy;
+      const imageRef = ref(storage, `/Images/${imageAsFile.name}`);
+      await uploadBytes(imageRef, imageAsFile).then((snapshot) => {});
+      await getDownloadURL(imageRef)
+        .then((url) => {
+          addDoc(propertiesDbRef, {
+            ...values,
+            propertyUrl: url,
+            UserUid: auth.currentUser.uid,
+            propertyAddedDate: date,
           })
-          .catch((error) => {
-            console.log(error);
+            .then((propertiesDbRef) => {
+              alert(
+                "New Property Added" +
+                  values.propertyName +
+                  values.propertyAddress
+              );
+              setValues({
+                propertyName: "",
+                propertyAddress: "",
+              });
+              inputRef.current.value = null;
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          setValues({
+            ...values,
+            propertyUrl: url,
+            UserUid: auth.currentUser.uid,
           });
-        setValues({
-          ...values,
-          propertyUrl: url,
-          UserUid: auth.currentUser.uid,
+        })
+        .catch((error) => {
+          switch (error.code) {
+            case "storage/object-not-found":
+              console.log(error.code);
+              break;
+            case "storage/unauthorized":
+              console.log(error.code);
+              break;
+            case "storage/canceled":
+              console.log(error.code);
+              break;
+
+            case "storage/unknown":
+              console.log(error.code);
+              break;
+
+            default:
+              break;
+          }
         });
-      })
-      .catch((error) => {
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
-        switch (error.code) {
-          case "storage/object-not-found":
-            console.log(error.code);
-            break;
-          case "storage/unauthorized":
-            console.log(error.code);
-            break;
-          case "storage/canceled":
-            console.log(error.code);
-            break;
-
-          case "storage/unknown":
-            console.log(error.code);
-            break;
-
-          default:
-            break;
-        }
-      });
-    // await addDoc(propertiesDbRef, values)
-    //   .then((propertiesDbRef) => {
-    //     // setValues({
-    //     //   propertyName: "",
-    //     //   propertyAddress: "",
-    //     //   propertyUrl: "",
-    //     // });
-    //     alert("Document created");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    } else {
+      return alert("Image is not JPEG type");
+    }
   };
 
   return (

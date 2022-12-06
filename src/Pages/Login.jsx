@@ -95,7 +95,6 @@ function Login() {
   };
 
   const handleFacebook = () => {
-    console.log("before method calling");
     signInWithFacebook()
       .then(async (result) => {
         const data = {
