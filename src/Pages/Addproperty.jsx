@@ -44,7 +44,13 @@ function Addproperty() {
 
   const addNewProperty = async (event) => {
     event.preventDefault();
-    if (imageAsFile == null) return;
+    if (
+      imageAsFile === "" ||
+      values.propertyAddress === "" ||
+      values.propertyName === ""
+    ) {
+      return alert("Invalid Details");
+    }
 
     var date = new Date();
     var dd = String(date.getDate()).padStart(2, "0");
