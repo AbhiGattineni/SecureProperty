@@ -51,6 +51,7 @@ function DisplayImages() {
             propertyName: doc.data().propertyName,
             propertyImageUrl: doc.data().propertyImageUrl,
           };
+          console.log(doc.data());
           propertyImages.push(data);
           setUsersLength(true);
         }
