@@ -8,7 +8,7 @@ import Addproperty from "./Pages/Addproperty";
 import Newproperty from "./Pages/Newproperty";
 import { AuthProvider } from "./Routes/AuthContext.jsx";
 import PrivateRoute from "./Routes/PrivateRoute.jsx";
-import Dashboard from "./Pages/Dashboard";
+import Dashboard from "./admin/Dashboard";
 
 function App() {
   return (
@@ -43,8 +43,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-            {/* <PrivateRoute exact path="/" component={Nav} /> */}
-            <Route path="/Dashboard" exact element={<Dashboard />} />
             <Route path="/signup" exact element={<Signup />} />
             <Route path="/Login" exact element={<Login />} />
             <Route path="/Forgot" exact element={<Forgot />} />

@@ -19,11 +19,7 @@ import { useEffect } from "react";
 import UploadImage from "../components/UploadImage";
 
 function AdminAddProperties() {
-  const [values, setValues] = useState({
-    propertyName: "",
-    propertyAddress: "",
-    propertyOwner: "",
-  });
+  const [values, setValues] = useState({});
   const [progress] = useState(0);
   const [running] = useState(false);
   const [imageAsFile, setImageAsFile] = useState("");
@@ -78,11 +74,11 @@ function AdminAddProperties() {
     await uploadBytes(imageRef, imageAsFile)
       .then((snapshot) => {
         getDownloadURL(imageRef).then((url) => {
-          console.log(url);
           addDoc(propertyImagesDbRef, {
             ...values,
-            propertyUrl: url,
-            UserUid: auth.currentUser.uid,
+            propertyImageUrl: url,
+            ownerId: ownerId,
+            propertyId: propertyId,
           })
             .then((propertiesDbRef) => {
               setValues({
@@ -97,11 +93,11 @@ function AdminAddProperties() {
             });
         });
 
-        setValues({
-          ...values,
-          propertyUrl: url,
-          UserUid: auth.currentUser.uid,
-        });
+        // setValues({
+        //   ...values,
+        //   propertyUrl: url,
+        //   ownerId: auth.currentUser.uid,
+        // });
       })
       .catch((error) => {
         // A full list of error codes is available at

@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext";
 import { doc, getDoc } from "firebase/firestore";
 
 import { db } from "../firebase";
-import Dashboard from "../Pages/Dashboard";
+import Dashboard from "../admin/Dashboard";
 
 export default function PrivateRoute({ children }) {
   const { currentUser } = useAuth();

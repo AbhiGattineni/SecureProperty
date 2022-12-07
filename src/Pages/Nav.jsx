@@ -9,7 +9,7 @@ import Dashboard from "./Dashboard";
 
 function Nav() {
   const tabList = {
-    dash: "",
+    dash: <Dashboard />,
     view: <DisplayImages />,
     add: <Addproperty />,
     edit: <Editdetails />,
@@ -30,18 +30,25 @@ function Nav() {
   };
   return (
     <div className="">
-      <div className="w-full h-20 bg-gray-200 justify-between flex items-center p-4">
-        <h1 className="text-xl font-medium">SECURE PROPERTY</h1>
+      <div className="fixed top-0 z-auto w-full h-20 bg-gray-200 justify-between flex items-center p-4">
+        <button
+          className="text-xl font-medium"
+          onClick={() => {
+            console.log("Clicked");
+            setActiveTab("dash");
+          }}
+        >
+          SECURE PROPERTY
+        </button>
         {/* <Link to={"/"} className="text-xl font-medium">
           SECURE PROPERTY
         </Link> */}
         <nav className="">
-          <ul className="fixed left-0 right-0 min-h-screen bg-gray-200 space-y-4 p-4 transform traslate-x-full md:min-h-0 md:space-y-0 md:space-x-6 md:p-0 md:tarnslate-x-0 md:relative md:flex">
+          <ul className="left-0 right-0 min-h-screen bg-gray-200 space-y-4 p-4 transform traslate-x-full md:min-h-0 md:space-y-0 md:space-x-6 md:p-0 md:tarnslate-x-0 md:relative md:flex">
             <li>
               <button
                 className="text-black border-2 border-white rounded-lg px-1"
                 onClick={() => {
-                  console.log("Clicked");
                   setActiveTab("dash");
                 }}
               >
@@ -52,7 +59,6 @@ function Nav() {
               <button
                 className="text-black border-2 border-white rounded-lg px-1"
                 onClick={() => {
-                  console.log("Clicked");
                   setActiveTab("view");
                 }}
               >
@@ -91,7 +97,7 @@ function Nav() {
           </ul>
         </nav>
       </div>
-      <div className="relative text-center drop-shadow-lg shadow-black text-2xl">
+      <div className="mt-20 text-center drop-shadow-lg shadow-black text-2xl">
         {tabList[activeTab]}
       </div>
     </div>
